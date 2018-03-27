@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}New Encounter{% endblock %}
+
+{% block content %}
+<h2>New Encounter</h2>
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" />
+</form>
+{% if encounter.id %}
+<a href="{% url 'polls:delete_encounter' encounter.id %}">Delete</a>
+{% endif %}
+{% endblock %}
