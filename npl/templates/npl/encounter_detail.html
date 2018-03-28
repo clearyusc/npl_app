@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{encounter.name}}{% endblock %}
+
+{% block content %}
+<h2>{{ encounter.name }}</h2>
+<ul>
+
+{% if encounter.action_prayer  %}
+    <li><h4>Prayer</h4></li>
+{% endif %}
+{% if encounter.action_testimony  %}
+    <li><h4>Testimony</h4></li>
+{% endif %}
+{% if encounter.action_gospel  %}
+    <li><h4>Gospel</h4></li>
+{% endif %}
+
+</ul>
+
+<h4>{{ encounter.response }}</h4>
+<p>{{encounter.date_time}}</p>
+<p>{{encounter.notes}}</p>
+<a href="{% url 'npl:edit_encounter' encounter.id %}">Edit</a>
+<a href="{% url 'npl:delete_encounter' encounter.id %}">Delete</a>
+{% endblock %}
