@@ -2,10 +2,29 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
+from django import forms
 from .models import Choice, Question, Encounter
+from .forms import EncounterForm
 from django.utils import timezone
 
 # Create your views here.
+
+
+def add_encounter(request):
+    if request.method == "POST":
+        form = EncounterForm(request.POST)
+        if form.is_valid():
+            model_instance = form.save(commit=False)
+            model_instance.date_time = timezone.now()
+            # todo: how do I make these simply not required?!
+            model_instance.lat = 0
+            model_instance.lng = 0
+            model_instance.save()
+            return HttpResponseRedirect(reverse_lazy('npl:encounters'))
+
+    else:
+        form = EncounterForm()
+        return render(request, 'npl/encounter_form.html', {'form': form})
 
 
 class EncounterIndex(generic.ListView):
@@ -20,7 +39,7 @@ class EncounterIndex(generic.ListView):
 class AddEncounter(generic.edit.CreateView):
     model = Encounter
     fields = ['name', 'action_prayer', 'action_testimony',
-              'action_gospel', 'response', 'notes']
+              'action_gospel', 'response', 'street_address', 'apt_or_unit', 'city', 'state', 'zip', 'notes']
     success_url = reverse_lazy('npl:encounters')
 
     def form_valid(self, form):
@@ -43,7 +62,7 @@ class DeleteEncounter(generic.DeleteView):
 class EditEncounter(generic.edit.UpdateView):
     model = Encounter
     fields = ['name', 'action_prayer', 'action_testimony',
-              'action_gospel', 'date_time', 'response', 'notes']
+              'action_gospel', 'response', 'street_address', 'apt_or_unit', 'city', 'state', 'zip', 'notes']
     success_url = reverse_lazy('npl:encounters')
     #todo: Change the url to go back to detail view?
 

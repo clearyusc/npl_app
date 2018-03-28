@@ -22,7 +22,7 @@ class Encounter(models.Model):
 
     # Geo-Location Fields:
     street_address = models.CharField(max_length=50)
-    apt_or_unit = models.CharField(max_length=15, default='')
+    apt_or_unit = models.CharField(blank=True, max_length=15, default='')
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=20)
     zip = models.IntegerField()
