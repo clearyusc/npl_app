@@ -10,8 +10,9 @@
     <div id="sidebar">
         {% block sidebar %}
         <ul>
-            <li><a href="{% url 'npl:encounters' %}">My Encounters</a></li>
-            <li><a href="{% url 'npl:add_encounter' %}">New Encounter</a></li>
+            <li><a href="{% url 'npl:dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'npl:my_encounters' %}">My Encounters</a></li>
+            <li><a href="{% url 'npl:new_encounter' %}">New Encounter</a></li>
         </ul>
         {% endblock %}
     </div>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<ul>
+
+{% if encounter.action_prayer  %}
+    <li><h4>Prayer</h4></li>
+{% endif %}
+{% if encounter.action_testimony  %}
+    <li><h4>Testimony</h4></li>
+{% endif %}
+{% if encounter.action_gospel  %}
+    <li><h4>Gospel</h4></li>
+{% endif %}
+
+</ul>
+
+{% endblock %}

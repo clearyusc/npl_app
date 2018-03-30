@@ -14,7 +14,7 @@ class Laborer(models.Model):
 
 
 class Encounter(models.Model):
-    user = models.ForeignKey(Laborer, on_delete=models.CASCADE)
+    laborer = models.ForeignKey(Laborer, on_delete=models.CASCADE)
     name = models.CharField(max_length=40)
     action_prayer = models.BooleanField(default=False)
     action_testimony = models.BooleanField(default=False)
@@ -26,7 +26,8 @@ class Encounter(models.Model):
     is_oikos = models.BooleanField(default=False)
 
     # Geo-Location Fields (can all be null if it is an oikos encounter)
-    street_address = models.CharField(max_length=50, blank=True, null=True)
+    street_address_number = models.CharField(max_length=10, blank=True, null=True)
+    street_address_name = models.CharField(max_length=50, blank=True, null=True)
     apt_or_unit = models.CharField(max_length=15, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True)
     state = models.CharField(max_length=20, blank=True, null=True)
