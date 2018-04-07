@@ -4,6 +4,7 @@
 
 {% block content %}
 <h2>{{ encounter.name }}</h2>
+<h4><em>{{ encounter.full_address }}</em></h4>
 <ul>
 
 {% if encounter.action_prayer  %}
@@ -18,7 +19,7 @@
 
 </ul>
 
-<h4>{{ encounter.response }}</h4>
+<h4>{{ encounter.response_description }}</h4>
 <p>{{encounter.date_time}}</p>
 <p>{{encounter.notes}}</p>
 <a href="{% url 'npl:edit_encounter' encounter.id %}">Edit</a>

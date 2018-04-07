@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}My Encounters{% endblock %}
+{% block title %}My Encounters: List{% endblock %}
 
 {% block content %}
 
 {% if encounters_list %}
 <h2>My Encounters</h2>
+<h4><a href="{% url 'npl:my_encounters_map' %}">View on Map</a></h4>
 <ul>
     {% for encounter in encounters_list %}
     <li>

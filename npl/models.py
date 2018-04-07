@@ -21,6 +21,7 @@ class Encounter(models.Model):
     action_gospel = models.BooleanField(default=False)
     phone_number = models.IntegerField(blank=True, null=True)
     response = models.CharField(max_length=2, choices=MINISTRY_RESPONSES)
+    response_description = models.CharField(max_length=40, null=True)
     notes = models.TextField(blank=True)
     date_time = models.DateTimeField(blank=True)
     is_oikos = models.BooleanField(default=False)
@@ -34,6 +35,7 @@ class Encounter(models.Model):
     zip = models.IntegerField(blank=True, null=True)
     lat = models.FloatField(blank=True, null=True)
     lng = models.FloatField(blank=True, null=True)
+    full_address = models.CharField(max_length=300, blank=True, null=True)
 
 
 class Team(models.Model):
