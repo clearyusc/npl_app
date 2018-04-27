@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{team.team_name}}{% endblock %}
+
+{% block content %}
+<h2>{{ team.team_name }}</h2>
+<h3><a href="{% url 'npl:team_dashboard' team.id %}">Team Dashboard</a></h3>
+
+<ul>
+    {% for member in team_members %}
+    <li>
+            {{member.user.username}}
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

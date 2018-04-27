@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+<h2>Settings</h2>
+<h3>Teams</h3>
+{% if my_teams_list %}
+<h4>My Teams</h4>
+<ul>
+    {% for team in my_teams_list %}
+    <li>
+          <a href="{% url 'npl:team_detail' team.id %}">
+            {{team.team_name}}
+          </a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You haven't joined any teams yet!</p>
+{% endif %}
+<a href="{% url 'npl:create_team' %}">
+    Create a Team
+</a>
+<br />
+<a href="{% url 'npl:join_team' %}">
+    Join a Team
+</a>
+<br />
+<br />
+<a href="{% url 'npl:logout' %}">Log out</a>
+{% endblock %}

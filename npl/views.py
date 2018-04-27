@@ -2,12 +2,18 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
+from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
+from django.views.generic.edit import FormView
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
+
 from .models import Encounter, Laborer, Team
 from .view_models import DashboardViewModel, EncounterPinViewModel
-from .forms import EncounterForm
+from .forms import EncounterForm, TeamForm
 from . import utilities
 from django.utils import timezone
 
@@ -28,10 +34,29 @@ def get_laborer_id(request):
     return Laborer.objects.get(user__id=user_id).id
 
 
+def get_laborer(request):
+    user_id = request.user.id
+    return Laborer.objects.get(user__id=user_id)
+
+
 def get_my_encounters(request):
     my_laborer_id = get_laborer_id(request)
     return Encounter.objects.filter(laborer_id=my_laborer_id)
 
+
+def get_team_encounters(team_id):
+    laborer_id_list = []
+
+    team = Team.objects.filter(id=team_id).first()
+    team_members = team.members.all()
+
+    # todo: OPTIMIZE THIS QUERY!
+
+    for member in team_members:
+        laborer_id = Laborer.objects.filter(id=member.id).first()
+        laborer_id_list.append(laborer_id)
+
+    return Encounter.objects.filter(laborer_id__in=laborer_id_list)
 
 # Create your views here.
 
@@ -110,18 +135,106 @@ def encounter_map(request):
     return render(request, 'npl/encounters_map.html', {'json': _json, 'map_center': _map_center})
 
 
-# todo: change view type?
-def view_dashboard(request):
+def view_my_dashboard(request):
     # todo: figure out which metrics most important to show:
     dashboard_vm = DashboardViewModel(get_my_encounters(request))
-    fields = ['num_encounters']
 
     _json = json.dumps(dashboard_vm, cls=LazyEncoder)
-    print('dashbaord vm = ' + str(_json))
     encounters_by_week = json.dumps({'num_encounters': dashboard_vm.num_encounters_by_week,
                                      'num_red_lights': dashboard_vm.num_red_lights_by_week})
-    print('e by w = ' + str(encounters_by_week))
     return render(request, 'npl/dashboard.html', {'django_json': _json, 'encounters_by_week': encounters_by_week})
+
+
+def view_settings(request):
+    my_laborer_id = get_laborer_id(request)
+    my_teams_list = Team.objects.all().filter(members__id=my_laborer_id)
+
+    other_team_members = []
+
+    for team in my_teams_list:
+        other_team_members.append(team.members.all().exclude(id=my_laborer_id))
+    #    my_teams_list = Team.objects.members.all().filter(laborer_id=get_laborer_id(request))
+    print('my team MEMBERS = {}'.format(other_team_members))
+    return render(request, 'npl/settings.html', {'my_teams_list': my_teams_list,
+                                                 'other_team_members_list': other_team_members})
+
+
+def view_team(request, pk):
+    team = Team.objects.filter(id=pk).first()
+    members = team.members.all()
+
+    return render(request, 'npl/team_detail.html', {'team': team, 'team_members': members})
+
+
+def view_team_dashboard(request, pk):
+    team_encounters = get_team_encounters(pk)
+    print('THE VAL = {}'.format(team_encounters))
+    # todo: figure out which metrics most important to show:
+    dashboard_vm = DashboardViewModel(team_encounters)
+
+    _json = json.dumps(dashboard_vm, cls=LazyEncoder)
+    encounters_by_week = json.dumps({'num_encounters': dashboard_vm.num_encounters_by_week,
+                                     'num_red_lights': dashboard_vm.num_red_lights_by_week})
+    return render(request, 'npl/dashboard.html', {'django_json': _json, 'encounters_by_week': encounters_by_week})
+
+
+def create_team(request):
+    if request.method == "POST":
+        form = TeamForm(request.POST)
+        if form.is_valid():
+            model_instance = form.save(commit=False)
+            model_instance.creation_date = timezone.now()
+            team_exists = Team.objects.filter(team_name=model_instance.team_name).count() > 0
+            if team_exists:
+                return render(request, 'npl/team_form.html', {'form': form, 'error': 'A team with that name already exists!'})
+            else:
+                model_instance.save()
+                model_instance.members.add(get_laborer(request))  # the creator of the team automatically joins
+                return HttpResponseRedirect(reverse_lazy('npl:settings'))
+
+        else:
+            return render(request, 'npl/team_form.html', {'form': form, 'error': 'Form is invalid!'})
+
+    else:
+        form = TeamForm(request.POST)
+        return render(request, 'npl/team_form.html', {'form': form})
+
+
+def join_team(request):
+    if request.method == "POST":
+        form = TeamForm(request.POST)
+        if form.is_valid():
+            model_instance = form.save(commit=False)
+            team_exists = Team.objects.filter(team_name=model_instance.team_name).count() > 0
+            if team_exists:
+                team = Team.objects.filter(team_name=model_instance.team_name).first()
+                #model_instance.creation_date = team.creation_date  # todo: is there a better way? sorta hacky
+                team.members.add(get_laborer(request))
+                return HttpResponseRedirect(reverse_lazy('npl:settings'))  # todo: improve this
+            else:
+                return render(request, 'npl/team_join.html', {'form': form, 'error': 'Team does not exist!'})
+
+        else:
+            return render(request, 'npl/team_form.html', {'form': form, 'error': 'Form is invalid!'})
+
+    else:
+        form = TeamForm(request.POST)
+        return render(request, 'npl/team_join.html', {'form': form})
+
+
+def log_out(request):
+    auth.logout(request)
+    return render(request, 'registration/logged_out.html')
+
+
+def landing_page(request):
+    return render(request, 'registration/about.html')
+
+
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm # LaborerCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
 
 
 class TeamEncounters(generic.View):

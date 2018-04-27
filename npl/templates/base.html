@@ -5,6 +5,8 @@
     {% block html_head %}<!-- to import static resources -->{% endblock %}
 </head>
 
+{% if user.is_authenticated %}
+
 <body>
     <h1>The NoPlaceLeft App</h1>
     <div id="sidebar">
@@ -13,6 +15,7 @@
             <li><a href="{% url 'npl:dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'npl:my_encounters' %}">My Encounters</a></li>
             <li><a href="{% url 'npl:new_encounter' %}">New Encounter</a></li>
+            <li><a href="{% url 'npl:settings' %}">Settings</a></li>
         </ul>
         {% endblock %}
     </div>
@@ -23,3 +26,5 @@
 </body>
 {% block scripts %}{% endblock %}
 </html>
+
+{% endif %}
