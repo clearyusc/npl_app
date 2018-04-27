@@ -4,16 +4,20 @@ from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib import auth
 from django.http import HttpResponseRedirect
+from .forms import CreateUserForm
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import FormView
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 
 from .models import Encounter, Laborer, Team
 from .view_models import DashboardViewModel, EncounterPinViewModel
-from .forms import EncounterForm, TeamForm
+from .forms import EncounterForm, TeamForm, CreateUserForm
 from . import utilities
 from django.utils import timezone
 
@@ -142,7 +146,8 @@ def view_my_dashboard(request):
     _json = json.dumps(dashboard_vm, cls=LazyEncoder)
     encounters_by_week = json.dumps({'num_encounters': dashboard_vm.num_encounters_by_week,
                                      'num_red_lights': dashboard_vm.num_red_lights_by_week})
-    return render(request, 'npl/dashboard.html', {'django_json': _json, 'encounters_by_week': encounters_by_week})
+    return render(request, 'npl/dashboard.html', {'title': 'My',
+                                                  'django_json': _json, 'encounters_by_week': encounters_by_week})
 
 
 def view_settings(request):
@@ -168,6 +173,7 @@ def view_team(request, pk):
 
 def view_team_dashboard(request, pk):
     team_encounters = get_team_encounters(pk)
+    team = Team.objects.filter(id=pk).first()
     print('THE VAL = {}'.format(team_encounters))
     # todo: figure out which metrics most important to show:
     dashboard_vm = DashboardViewModel(team_encounters)
@@ -175,7 +181,8 @@ def view_team_dashboard(request, pk):
     _json = json.dumps(dashboard_vm, cls=LazyEncoder)
     encounters_by_week = json.dumps({'num_encounters': dashboard_vm.num_encounters_by_week,
                                      'num_red_lights': dashboard_vm.num_red_lights_by_week})
-    return render(request, 'npl/dashboard.html', {'django_json': _json, 'encounters_by_week': encounters_by_week})
+    return render(request, 'npl/dashboard.html', {'title': team.team_name,
+                                                  'django_json': _json, 'encounters_by_week': encounters_by_week})
 
 
 def create_team(request):
@@ -235,6 +242,30 @@ class SignUp(generic.CreateView):
     form_class = UserCreationForm # LaborerCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
+
+
+class CreateUserView(SuccessMessageMixin, generic.CreateView):
+    success_url = reverse_lazy('login')
+    form_class = CreateUserForm
+    template_name = 'registration/signup.html'
+    success_message = 'New new user profile has been created'
+
+    def form_valid(self, form):
+        c = {'form': form, }
+        user = form.save(commit=False)
+        # Cleaned(normalized) data
+        password = form.cleaned_data['password']
+        repeat_password = form.cleaned_data['repeat_password']
+        if password != repeat_password:
+            messages.error(self.request, "Passwords do not Match", extra_tags='alert alert-danger')
+            return render(self.request, self.template_name, c)
+        user.set_password(password)
+        user.save()
+
+        # Create Laborer
+        Laborer.objects.create(user=user, creation_date=timezone.now())
+
+        return super(CreateUserView, self).form_valid(form)
 
 
 class TeamEncounters(generic.View):

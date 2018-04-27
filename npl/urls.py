@@ -5,7 +5,7 @@ from . import views
 app_name = 'npl'
 urlpatterns = [
     path('/', views.landing_page, name="landing_page"),
-    path('signup/', views.SignUp.as_view(), name='signup'),
+    path('signup/', views.CreateUserView.as_view(), name='signup'),
     path('encounter/new/', views.new_encounter, name="new_encounter"),
     path('encounter/<int:pk>/', views.DetailEncounter.as_view(), name='detail_encounter'),
     path('encounter/<int:pk>/edit/', views.edit_encounter, name='edit_encounter'),

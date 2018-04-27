@@ -24,6 +24,24 @@ class TeamForm(ModelForm):
     #    return exists_already
 
 
+class CreateUserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    repeat_password = forms.CharField(widget=forms.PasswordInput)
+    # Here we can add the extra form fields that we will use to create another model object
+    # phone_number = forms.CharField(required=False)
+    # date_of_birth = forms.CharField(required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+        ]
+
+
 '''class LaborerCreationForm(UserCreationForm):
     # future opps: Add fields as appropriate for your Profile mode
     #job_title = forms.CharField(max_length=100, required=True)

@@ -10,7 +10,7 @@ MINISTRY_RESPONSES = (('RL', 'Red Light'),
 
 class Laborer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    creation_date = models.DateField()
+    creation_date = models.DateTimeField()
 
 
 class Encounter(models.Model):
