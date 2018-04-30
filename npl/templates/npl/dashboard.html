@@ -13,12 +13,20 @@
 {% block content %}
 
 <h2>{{title}} Dashboard</h2>
-<h3>Response Distribution</h3>
-<div id="response_percentages_chart"></div>
-<br />
-<h3>Encounters over the last 4 weeks</h3>
-<div id="encounters_over_time_chart"></div>
 
+<div class="card">
+  <div class="card-body">
+      <h5 class="card-title">Response Distribution</h5>
+      <div id="response_percentages_chart"></div>
+  </div>
+</div>
+<br />
+<div class="card">
+  <div class="card-body">
+      <h5 class="card-title">Encounters For The Last 4 Weeks</h5>
+      <div id="encounters_over_time_chart"></div>
+  </div>
+</div>
 
 {% endblock %}
 
