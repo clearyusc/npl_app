@@ -20,7 +20,10 @@
 
 
 <body class="bg-light">
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"><a class="navbar-brand" href="#">NPL App</a></nav>
+    {% load static %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"><a class="navbar-brand" href="{% url 'npl:dashboard' %}">
+            <img src="{% static 'npl/npl-logo-1.png' %}" width="40" height="40" class="d-inline-block align-center">
+        <span class="ml-5">A NoPlaceLeft App</span></a></nav>
 
     <br />
     <br />
@@ -37,17 +40,17 @@
  <nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark w-100">
             <div class="collapse navbar-collapse justify-content-center">
                 <ul class="navbar-nav w-100 d-flex justify-content-around">
-                  <li class="nav-item active">
+                  <li class="nav-item  {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                       <a class="nav-link" href="{% url 'npl:dashboard' %}"><i class="fas fa-tachometer-alt fa-2x"></i></a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item  {% if request.resolver_match.url_name == 'my_encounters' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'npl:my_encounters' %}"><i class="fas fa-list-alt fa-2x"></i></a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item  {% if request.resolver_match.url_name == 'new_encounter' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'npl:new_encounter' %}"><i class="fas fa-plus-circle fa-2x"></i></a>
                   </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'npl:settings' %}"><i class="fas fa-cog fa-2x"></i></a>
+                  <li class="nav-item  {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'npl:settings' %}"><i class="fas fa-users fa-2x"></i></a>
                     </li>
                 </ul>
             </div>

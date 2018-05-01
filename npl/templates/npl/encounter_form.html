@@ -5,11 +5,15 @@
 {% block content %}
 <h2>New Encounter</h2>
 
+<div class="container">
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save" />
+    <div class="text-center">
+    <input type="submit" class="btn btn-success" value="Save" /></div>
 </form>
-{% if encounter.id %}
+</div>
+
+    {% if encounter.id %}
 <a href="{% url 'npl:delete_encounter' encounter.id %}">Delete</a>
 {% endif %}
 

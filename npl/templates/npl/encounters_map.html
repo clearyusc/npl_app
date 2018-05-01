@@ -12,13 +12,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <style>
-    body {
-    padding: 0;
-    margin: 0;
-}
-html, body, #map {
-    height: 85%;
-    width: 100vw;
+#map {
+    width: 80vw;
+    height: 65vh;
 }
 </style>
 {% endblock %}
@@ -26,10 +22,17 @@ html, body, #map {
 
 {% block content %}
 
-<h2>My Encounters: Map</h2>
-<h4><a href="{% url 'npl:my_encounters' %}">View in List</a></h4>
+<div class="d-flex justify-content-between align-center">
+    <h2>My Encounters</h2>
+<a class="btn btn-outline-primary" href="{% url 'npl:my_encounters' %}">List View</a>
+</div>
 
- <div id="map" ></div>
+<div class="card mt-3">
+    <div class="card-body">
+       <div id="map" ></div>
+    </div>
+</div>
+
 
 {% endblock %}
 

@@ -12,6 +12,11 @@ class EncounterForm(ModelForm):
         fields = ['name', 'action_prayer', 'action_testimony', 'action_gospel', 'response',
                   'street_address_number', 'street_address_name', 'apt_or_unit', 'city', 'state', 'zip', 'notes']
 
+    def __init__(self, *args, **kwargs):
+        super(EncounterForm, self).__init__(*args, **kwargs)
+        #self.fields['name'].widget.attrs.update({'class': 'test_this_class'})
+        self.fields['action_prayer'].widget.attrs.update({'class': 'btn btn-secondary'})
+
 
 class TeamForm(ModelForm):
     class Meta:

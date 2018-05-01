@@ -5,10 +5,13 @@
 {% block content %}
 
 {% if encounters_list %}
-<h2>My Encounters</h2>
-<h4><a href="{% url 'npl:my_encounters_map' %}">View on Map</a></h4>
+<div class="d-flex justify-content-between align-center">
+    <h2>My Encounters</h2>
+<a class="btn btn-outline-primary" href="{% url 'npl:my_encounters_map' %}">Map View</a>
+</div>
 
-    <div class="card" style="width: 18rem;">
+<div class="card mt-3">
+    <div class="card-body">
       <ul class="list-group list-group-flush">
            {% for encounter in encounters_list %}
         <li class="list-group-item"><a href="{% url 'npl:detail_encounter' encounter.id %}">
@@ -17,13 +20,9 @@
           {% endfor %}
       </ul>
     </div>
-
+    </div>
 {% else %}
 <p>You haven't had any encounters yet!</p>
 {% endif %}
-
 <br />
-<br />
-<a href="{% url 'npl:new_encounter' %}">New Encounter</a>
-
 {% endblock %}
