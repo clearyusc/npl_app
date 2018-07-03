@@ -19,6 +19,7 @@ urlpatterns = [
     path('team/<int:pk>/dashboard', views.view_team_dashboard, name="team_dashboard"),
     path('team/create_team/', views.create_team, name="create_team"),
     path('team/join_team/', views.join_team, name="join_team"),
+    path('team/leave_team/<int:pk>', views.leave_team, name="leave_team"),
     path('logout/', views.log_out, name="logout"),
 ]
 

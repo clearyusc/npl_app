@@ -3,15 +3,29 @@
 {% block title %}{{team.team_name}}{% endblock %}
 
 {% block content %}
-<h2>{{ team.team_name }}</h2>
-<h3><a href="{% url 'npl:team_dashboard' team.id %}">Team Dashboard</a></h3>
 
-<ul>
-    {% for member in team_members %}
-    <li>
-            {{member.user.username}}
-    </li>
-    {% endfor %}
-</ul>
-
+<div class="card shadow my-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title">{{ team.team_name }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-primary" href="{% url 'npl:team_dashboard' team.id %}">Team Dashboard</a>
+        </div>
+        <hr />
+        <strong>Members:</strong>
+        <ul>
+            {% for member in team_members %}
+            <li>
+                    {{member.user.username}}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-danger" href="{% url 'npl:leave_team' team.id %}">Leave Team</a>
+        </div>
+  </div>
+</div>
 {% endblock %}

@@ -15,12 +15,13 @@
     </div>
     <div class="card-body">
         {% if my_teams_list %}
-         <div class="list-group list-group-flush">
+         <div class="list-group list-group-flush d-flex justify-content-between">
                        {% for team in my_teams_list %}
 
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                        href="{% url 'npl:team_detail' team.id %}">
                         <strong>{{team.team_name}}</strong>
+                        <span class="badge badge-pill badge-secondary">{{ team.number_of_members }}</span>
                     </a>
                  {% endfor %}
          </div>

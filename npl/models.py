@@ -42,4 +42,5 @@ class Team(models.Model):
     team_name = models.CharField(max_length=40)
     creation_date = models.DateTimeField(blank=True)
     members = models.ManyToManyField(Laborer)
+    number_of_members = models.IntegerField(default=1)
     # leaders = models.ManyToManyField(Laborer)

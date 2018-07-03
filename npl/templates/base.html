@@ -54,6 +54,9 @@
                   <li class="nav-item  {% if request.resolver_match.url_name == 'new_encounter' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'npl:new_encounter' %}"><i class="fas fa-plus-circle fa-2x"></i></a>
                   </li>
+                  <li class="nav-item  {% if request.resolver_match.url_name == 'my_encounters_map' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'npl:my_encounters_map' %}"><i class="fas fa-map-marker-alt fa-2x"></i></a>
+                  </li>
                   <li class="nav-item  {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
                         <a class="nav-link" href="{% url 'npl:settings' %}"><i class="fas fa-users fa-2x"></i></a>
                     </li>

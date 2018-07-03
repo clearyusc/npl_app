@@ -154,14 +154,17 @@ def view_settings(request):
     my_laborer_id = get_laborer_id(request)
     my_teams_list = Team.objects.all().filter(members__id=my_laborer_id)
 
-    other_team_members = []
+    other_team_members_list = []
 
     for team in my_teams_list:
-        other_team_members.append(team.members.all().exclude(id=my_laborer_id))
+        other_team_members = team.members.all().exclude(id=my_laborer_id)
+        other_team_members_list.append(other_team_members)
+
     #    my_teams_list = Team.objects.members.all().filter(laborer_id=get_laborer_id(request))
-    print('my team MEMBERS = {}'.format(other_team_members))
+    print('my team MEMBERS = {}'.format(other_team_members_list))
     return render(request, 'npl/settings.html', {'my_teams_list': my_teams_list,
-                                                 'other_team_members_list': other_team_members})
+                                                 'other_team_members_list': other_team_members_list,
+                                                 })
 
 
 def view_team(request, pk):
@@ -217,6 +220,7 @@ def join_team(request):
                 team = Team.objects.filter(team_name=model_instance.team_name).first()
                 #model_instance.creation_date = team.creation_date  # todo: is there a better way? sorta hacky
                 team.members.add(get_laborer(request))
+                team.number_of_members = team.members.count()
                 return HttpResponseRedirect(reverse_lazy('npl:settings'))  # todo: improve this
             else:
                 return render(request, 'npl/team_join.html', {'form': form, 'error': 'Team does not exist!'})
@@ -227,6 +231,15 @@ def join_team(request):
     else:
         form = TeamForm(request.POST)
         return render(request, 'npl/team_join.html', {'form': form})
+
+
+def leave_team(request, pk):
+    team = Team.objects.filter(id=pk).first()
+
+    laborer = get_laborer(request)
+    team.members.remove(laborer)
+
+    return HttpResponseRedirect(reverse_lazy('npl:settings'))
 
 
 def log_out(request):

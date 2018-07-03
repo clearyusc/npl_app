@@ -14,16 +14,20 @@
 
 <h2>{{title}} Dashboard</h2>
 
-<div class="card shadow">
+<div class="card shadow mt-2">
+    <div class="card-header">
+        <h4 class="card-title">Response Distribution</h4>
+    </div>
   <div class="card-body">
-      <h5 class="card-title">Response Distribution</h5>
       <div id="response_percentages_chart"></div>
   </div>
 </div>
 <br />
-<div class="card shadow">
+<div class="card shadow mb-2">
+    <div class="card-header">
+        <h5 class="card-title">Encounters Over Last 4 Weeks</h5>
+    </div>
   <div class="card-body">
-      <h5 class="card-title">Encounters For The Last 4 Weeks</h5>
       <div id="encounters_over_time_chart"></div>
   </div>
 </div>
@@ -32,17 +36,16 @@
 
 {% block scripts %}
 <script>
-// Color scheme from https://coolors.co/658fca-d00000-ffba08-032b43-136f63
 var json = {{ django_json|safe }}
 var chart1 = c3.generate({
     bindto: '#response_percentages_chart',
     data: {
         colors: {
-            'RL': '#D00000',
-            'YL': '#FFBA08',
-            'GL': '#136F63',
-            'WT': '#658FCA',
-            'RT': '#032B43',
+            'RL': '#dc3545',
+            'YL': '#ffc107',
+            'GL': '#28a745',
+            'WT': '#17a2b8',
+            'RT': '#6c757d',
         },
         columns: [
             ['RL', json.num_red_lights],
@@ -72,12 +75,8 @@ var chart2 = c3.generate({
     data: {
         columns: [
             num_encounters,
-            num_red_lights,
         ],
         type: 'bar',
-        groups: [
-            ['num_encounters', 'num_red_lights']
-        ]
     },
     grid: {
         y: {
