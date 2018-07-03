@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 
 {% block title %}New Encounter{% endblock %}
 
@@ -6,8 +7,8 @@
 <h2>New Encounter</h2>
 
 <div class="container">
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
+<form method="post" class="form">{% csrf_token %}
+    {% bootstrap_form form %}
     <div class="text-center">
     <input type="submit" class="btn btn-success" value="Save" /></div>
 </form>

@@ -268,14 +268,6 @@ class CreateUserView(SuccessMessageMixin, generic.CreateView):
         return super(CreateUserView, self).form_valid(form)
 
 
-class TeamEncounters(generic.View):
-    print('b')
-
-
-class Settings(generic.View):
-    print('c')
-
-
 class DetailEncounter(generic.DetailView):
     model = Encounter
     fields = ['name', 'response_description', 'notes']

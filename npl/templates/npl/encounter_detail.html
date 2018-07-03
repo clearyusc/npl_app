@@ -3,25 +3,58 @@
 {% block title %}{{encounter.name}}{% endblock %}
 
 {% block content %}
-<h2>{{ encounter.name }}</h2>
-<h4><em>{{ encounter.full_address }}</em></h4>
-<ul>
+<div class="card shadow my-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title">{{ encounter.name }}</h2>
 
-{% if encounter.action_prayer  %}
-    <li><h4>Prayer</h4></li>
-{% endif %}
-{% if encounter.action_testimony  %}
-    <li><h4>Testimony</h4></li>
-{% endif %}
-{% if encounter.action_gospel  %}
-    <li><h4>Gospel</h4></li>
-{% endif %}
+        {% if encounter.response == 'RL' %}
+        <span class="badge badge-danger"> {{ encounter.response_description }}</span>
+        {% endif %}
+        {% if encounter.response == 'YL' %}
+        <span class="badge badge-warning"> {{ encounter.response_description }}</span>
+        {% endif %}
+        {% if encounter.response == 'GL' %}
+        <span class="badge badge-success"> {{ encounter.response_description }}</span>
+        {% endif %}
+        {% if encounter.response == 'WT' %}
+        <span class="badge badge-info"> Wants Training</span>
+        {% endif %}
+        {% if encounter.response == 'RT' %}
+        <span class="badge badge-secondary"> Rejects Training</span>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        {% if encounter.full_address %}
+        <p class="text-muted"><strong>{{ encounter.full_address }}</strong></p>
+        {% else %}
+        <p class="text-muted"><strong>No address recorded.</strong></p>
+        {% endif %}
 
-</ul>
+        <ul class="list-unstyled">
+        {% if encounter.action_prayer  %}
+            <li><h5>Prayer</h5></li>
+        {% endif %}
+        {% if encounter.action_testimony  %}
+            <li><h5>Testimony</h5></li>
+        {% endif %}
+        {% if encounter.action_gospel  %}
+            <li><h5>Gospel</h5></li>
+        {% endif %}
+        </ul>
 
-<h4>{{ encounter.response_description }}</h4>
-<p>{{encounter.date_time}}</p>
-<p>{{encounter.notes}}</p>
-<a href="{% url 'npl:edit_encounter' encounter.id %}">Edit</a>
-<a href="{% url 'npl:delete_encounter' encounter.id %}">Delete</a>
+        <hr />
+
+
+        <p>{{encounter.notes}}</p>
+        <span class="text-muted">{{encounter.date_time}}</span>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-content-around">
+            <a class="btn btn-outline-danger" href="{% url 'npl:delete_encounter' encounter.id %}">Delete</a>
+            <a class="btn btn-outline-primary" href="{% url 'npl:edit_encounter' encounter.id %}">Edit</a>
+        </div>
+  </div>
+</div>
+
+
 {% endblock %}

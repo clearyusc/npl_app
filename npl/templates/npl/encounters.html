@@ -5,22 +5,40 @@
 {% block content %}
 
 {% if encounters_list %}
-<div class="d-flex justify-content-between align-center">
+<div class="d-flex justify-content-between align-items-center">
     <h2>My Encounters</h2>
 <a class="btn btn-outline-primary" href="{% url 'npl:my_encounters_map' %}">Map View</a>
 </div>
 
-<div class="card mt-3">
-    <div class="card-body">
-      <ul class="list-group list-group-flush">
+<!--<div class="card mt-3">
+    <div class="card-body"> -->
+      <div class="list-group mt-3">
            {% for encounter in encounters_list %}
-        <li class="list-group-item"><a href="{% url 'npl:detail_encounter' encounter.id %}">
-            {{encounter.name}}, {{encounter.response}}
-        </a></li>
+            <a class="list-group-item list-group-item-action d-flex justify-content-between"
+               href="{% url 'npl:detail_encounter' encounter.id %}">
+                {{encounter.name}}
+
+            {% if encounter.response == 'RL' %}
+            <span class="badge badge-danger"> {{ encounter.response_description }}</span>
+            {% endif %}
+            {% if encounter.response == 'YL' %}
+            <span class="badge badge-warning"> {{ encounter.response_description }}</span>
+            {% endif %}
+            {% if encounter.response == 'GL' %}
+            <span class="badge badge-success"> {{ encounter.response_description }}</span>
+            {% endif %}
+            {% if encounter.response == 'WT' %}
+            <span class="badge badge-info"> Wants Training</span>
+            {% endif %}
+            {% if encounter.response == 'RT' %}
+            <span class="badge badge-secondary"> Rejects Training</span>
+            {% endif %}
+
+            </a>
           {% endfor %}
-      </ul>
-    </div>
-    </div>
+      </div>
+   <!-- </div>
+    </div> -->
 {% else %}
 <p>You haven't had any encounters yet!</p>
 {% endif %}

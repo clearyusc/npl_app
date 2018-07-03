@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 
 {% block title %}Join a Team{% endblock %}
 
 {% block content %}
 <h2>Join a Team</h2>
 
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
+<form method="post" class="form">{% csrf_token %}
+    {% bootstrap_form form %}
     <input type="submit" value="Join Team" />
 </form>
 
