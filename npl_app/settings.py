@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import raven
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,10 +28,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+RAVEN_CONFIG = {
+    'dsn': 'https://9fa1f663919b4cdabab9ab2a0b610c8d:bb1e76564b4d4509a4173832f74304dd@sentry.io/1237578',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    #'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+}
 
 # Application definition
 
 INSTALLED_APPS = [
+    'raven.contrib.django.raven_compat',
     'bootstrap4',
     'npl.apps.NplConfig',
     'django.contrib.admin',
