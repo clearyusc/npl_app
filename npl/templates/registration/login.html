@@ -1,8 +1,16 @@
 {% extends "base_generic.html" %}
 {% load bootstrap4 %}
 
-{% block content %}
+{% block title %}
+    NPL App
+{% endblock %}
 
+{% block html_head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'npl/cover.css' %}" />
+{% endblock %}
+
+{% block content %}
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}

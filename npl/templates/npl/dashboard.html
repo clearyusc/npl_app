@@ -14,6 +14,9 @@
 
 <h2>{{title}} Dashboard</h2>
 
+{% if dashboard_empty %}
+<p>There are no encounters to show.  Get out there!</p>
+{% else %}
 <div class="card shadow mt-2">
     <div class="card-header">
         <h4 class="card-title">Response Distribution</h4>
@@ -31,7 +34,7 @@
       <div id="encounters_over_time_chart"></div>
   </div>
 </div>
-
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

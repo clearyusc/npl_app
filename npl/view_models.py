@@ -70,29 +70,49 @@ class DashboardViewModel:
 
     def __init__(self, my_encounters: models.QuerySet, team_encounters=None):
         self.num_encounters = my_encounters.count()
+        if self.num_encounters == 0:
+            self.num_prayers = 0
+            self.num_testimonies = 0
+            self.num_gospel_shares = 0
 
-        self.num_prayers = my_encounters.filter(action_prayer=True).count()
-        self.num_testimonies = my_encounters.filter(action_testimony=True).count()
-        self.num_gospel_shares = my_encounters.filter(action_gospel=True).count()
+            self.num_red_lights = 0
+            self.num_yellow_lights = 0
+            self.num_green_lights = 0
+            self.num_believer_wants_training = 0
+            self.num_believer_rejects_training = 0
 
-        self.num_red_lights = my_encounters.filter(response='RL').count()
-        self.num_yellow_lights = my_encounters.filter(response='YL').count()
-        self.num_green_lights = my_encounters.filter(response='GL').count()
-        self.num_believer_wants_training = my_encounters.filter(response='WT').count()
-        self.num_believer_rejects_training = my_encounters.filter(response='RT').count()
+            self.percentage_red_lights = 0
+            self.percentage_yellow_lights = 0
+            self.percentage_green_lights = 0
+            self.percentage_believer_wants_training = 0
+            self.percentage_believer_rejects_training = 0
+            i = 0
+            while i < NUM_WEEKS_TO_SHOW:
+                self.num_encounters_by_week[i] = 0
+                self.num_red_lights_by_week[i] = 0
+        else:
+            self.num_prayers = my_encounters.filter(action_prayer=True).count()
+            self.num_testimonies = my_encounters.filter(action_testimony=True).count()
+            self.num_gospel_shares = my_encounters.filter(action_gospel=True).count()
 
-        self.percentage_red_lights = self.num_red_lights / self.num_encounters
-        self.percentage_yellow_lights = self.num_yellow_lights / self.num_encounters
-        self.percentage_green_lights = self.num_green_lights / self.num_encounters
-        self.percentage_believer_wants_training = self.num_believer_wants_training / self.num_encounters
-        self.percentage_believer_rejects_training = self.num_believer_rejects_training / self.num_encounters
+            self.num_red_lights = my_encounters.filter(response='RL').count()
+            self.num_yellow_lights = my_encounters.filter(response='YL').count()
+            self.num_green_lights = my_encounters.filter(response='GL').count()
+            self.num_believer_wants_training = my_encounters.filter(response='WT').count()
+            self.num_believer_rejects_training = my_encounters.filter(response='RT').count()
 
-        i = 0
-        starting_week_number = datetime.datetime.now().isocalendar()[1] - NUM_WEEKS_TO_SHOW + 1
-        while i < NUM_WEEKS_TO_SHOW:
-            self.num_encounters_by_week[i] = my_encounters.filter(date_time__week=(starting_week_number+i)).count()
-            self.num_red_lights_by_week[i] = my_encounters.filter(response='RL', date_time__week=(starting_week_number+i)).count()
-            i += 1
+            self.percentage_red_lights = self.num_red_lights / self.num_encounters
+            self.percentage_yellow_lights = self.num_yellow_lights / self.num_encounters
+            self.percentage_green_lights = self.num_green_lights / self.num_encounters
+            self.percentage_believer_wants_training = self.num_believer_wants_training / self.num_encounters
+            self.percentage_believer_rejects_training = self.num_believer_rejects_training / self.num_encounters
+
+            i = 0
+            starting_week_number = datetime.datetime.now().isocalendar()[1] - NUM_WEEKS_TO_SHOW + 1
+            while i < NUM_WEEKS_TO_SHOW:
+                self.num_encounters_by_week[i] = my_encounters.filter(date_time__week=(starting_week_number+i)).count()
+                self.num_red_lights_by_week[i] = my_encounters.filter(response='RL', date_time__week=(starting_week_number+i)).count()
+                i += 1
 
 
     '''def get_percentage_of_red_lights()

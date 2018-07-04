@@ -4,7 +4,9 @@ from . import views
 
 app_name = 'npl'
 urlpatterns = [
-    path('/', views.landing_page, name="landing_page"),
+    path('', views.landing_page, name="landing_page"),
+    path('features/', views.features, name="features"),
+    path('contact/', views.contact, name="contact"),
     path('signup/', views.CreateUserView.as_view(), name='signup'),
     path('encounter/new/', views.new_encounter, name="new_encounter"),
     path('encounter/<int:pk>/', views.DetailEncounter.as_view(), name='detail_encounter'),
@@ -20,6 +22,7 @@ urlpatterns = [
     path('team/create_team/', views.create_team, name="create_team"),
     path('team/join_team/', views.join_team, name="join_team"),
     path('team/leave_team/<int:pk>', views.leave_team, name="leave_team"),
+    path('login/', views.log_in, name="login"),
     path('logout/', views.log_out, name="logout"),
 ]
 

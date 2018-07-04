@@ -80,11 +80,20 @@ def new_encounter(request):
             return HttpResponseRedirect(reverse_lazy('npl:my_encounters'))
 
     else:
-        recent = get_my_encounters(request).order_by('-date_time')[0]
-        form = EncounterForm(initial={'street_address_name': recent.street_address_name,
-                                      'city': recent.city,
-                                      'state': recent.state,
-                                      'zip': recent.zip})
+        my_encounters = get_my_encounters(request)
+        if my_encounters.exists():
+            print('IT EXISTS?!?!?!?!?!?!?!?!')
+            recent = my_encounters.order_by('-date_time')[0]
+            form = EncounterForm(initial={'street_address_name': recent.street_address_name,
+                                          'city': recent.city,
+                                          'state': recent.state,
+                                          'zip': recent.zip})
+        else:
+            form = EncounterForm(initial={'street_address_name': '',
+                                          'city': '',
+                                          'state': '',
+                                          'zip': ''})
+
         return render(request, 'npl/encounter_form.html', {'form': form})
 
 
@@ -125,14 +134,21 @@ class EncounterIndexList(generic.ListView):
 
 def encounter_map(request):
     encounter_pins = []
+    default_map_center = json.dumps({'lat': 39.8283, 'lng': -98.5795, 'zoom': 4})
+
     my_encounters = get_my_encounters(request).order_by('-date_time')
+
+    # Check if the user has logged any encounters yet!
+    if not my_encounters.exists():
+        return render(request, 'npl/encounters_map.html', {'json': 'no_encounters', 'map_center': default_map_center})
+
     for encounter in my_encounters:
         if encounter.lat is not None and encounter.lng is not None:
             encounter_pins.append(EncounterPinViewModel(encounter))
 
     _json = json.dumps(encounter_pins, cls=LazyEncoder)
     if encounter_pins is None:  # default map center shows the entire US in view
-        _map_center = json.dumps({'lat': 39.8283, 'lng': -98.5795, 'zoom': 4})
+        _map_center = default_map_center
     else:
         _map_center = json.dumps({'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
 
@@ -141,12 +157,18 @@ def encounter_map(request):
 
 def view_my_dashboard(request):
     # todo: figure out which metrics most important to show:
+    my_encounters = get_my_encounters(request)
+
+    if not my_encounters.exists():
+        return render(request, 'npl/dashboard.html', {'title': 'My', 'dashboard_empty': True,
+                                                      'django_json': '', 'encounters_by_week': ''})
+
     dashboard_vm = DashboardViewModel(get_my_encounters(request))
 
     _json = json.dumps(dashboard_vm, cls=LazyEncoder)
     encounters_by_week = json.dumps({'num_encounters': dashboard_vm.num_encounters_by_week,
                                      'num_red_lights': dashboard_vm.num_red_lights_by_week})
-    return render(request, 'npl/dashboard.html', {'title': 'My',
+    return render(request, 'npl/dashboard.html', {'title': 'My', 'dashboard_empty': False,
                                                   'django_json': _json, 'encounters_by_week': encounters_by_week})
 
 
@@ -177,14 +199,18 @@ def view_team(request, pk):
 def view_team_dashboard(request, pk):
     team_encounters = get_team_encounters(pk)
     team = Team.objects.filter(id=pk).first()
-    print('THE VAL = {}'.format(team_encounters))
+
+    if not team_encounters.exists():
+        return render(request, 'npl/dashboard.html', {'title': 'My', 'dashboard_empty': True,
+                                                      'django_json': '', 'encounters_by_week': ''})
+
     # todo: figure out which metrics most important to show:
     dashboard_vm = DashboardViewModel(team_encounters)
 
     _json = json.dumps(dashboard_vm, cls=LazyEncoder)
     encounters_by_week = json.dumps({'num_encounters': dashboard_vm.num_encounters_by_week,
                                      'num_red_lights': dashboard_vm.num_red_lights_by_week})
-    return render(request, 'npl/dashboard.html', {'title': team.team_name,
+    return render(request, 'npl/dashboard.html', {'title': team.team_name, 'dashboard_empty': False,
                                                   'django_json': _json, 'encounters_by_week': encounters_by_week})
 
 
@@ -242,6 +268,10 @@ def leave_team(request, pk):
     return HttpResponseRedirect(reverse_lazy('npl:settings'))
 
 
+def log_in(request):
+    return render(request, 'registration/login.html')
+
+
 def log_out(request):
     auth.logout(request)
     return render(request, 'registration/logged_out.html')
@@ -249,6 +279,14 @@ def log_out(request):
 
 def landing_page(request):
     return render(request, 'registration/about.html')
+
+
+def features(request):
+    return render(request, 'registration/features.html')
+
+
+def contact(request):
+    return render(request, 'registration/contact.html')
 
 
 class SignUp(generic.CreateView):

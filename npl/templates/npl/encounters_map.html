@@ -60,13 +60,14 @@ map_center = {{ map_center|safe }}
 var mymap = L.map('map').setView([map_center.lat, map_center.lng], map_center.zoom);
 
 var pins = {{ json|safe }}
-
-for (var i=0; i<pins.length; i++) {
- pin = pins[i];
- if (pin && pin.lat != undefined && pin.lng != undefined){
-  circleMarker = L.circleMarker([pin.lat, pin.lng], {radius: 10, color: getResponseColor(pin.response), opacity: 0.2}).addTo(mymap)
-   .bindPopup(`<h3>${pin.name} (${pin.response})</h3>${pin.full_address}<br><strong>${pin.actions.join(', ')}</strong><br>${pin.date_time}`)
- }
+if (pins != 'no_encounters') {
+    for (var i=0; i<pins.length; i++) {
+     pin = pins[i];
+     if (pin && pin.lat != undefined && pin.lng != undefined){
+      circleMarker = L.circleMarker([pin.lat, pin.lng], {radius: 10, color: getResponseColor(pin.response), opacity: 0.2}).addTo(mymap)
+       .bindPopup(`<h3>${pin.name} (${pin.response})</h3>${pin.full_address}<br><strong>${pin.actions.join(', ')}</strong><br>${pin.date_time}`)
+     }
+    }
 }
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
