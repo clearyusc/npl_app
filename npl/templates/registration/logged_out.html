@@ -1,7 +1,14 @@
 {% extends "base_generic.html" %}
 
-{% block content %}
-<p>Logged out!</p>
+{% block html_head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'npl/cover.css' %}" />
+{% endblock %}
 
-<a href="{% url 'login'%}">Click here to login again.</a>
+{% block content %}
+<p class="lead">Logged out!</p>
+        <p class="lead">
+            <a class="btn btn-primary" href="{% url 'npl:signup' %}">Create account</a>
+            <a class="btn btn-success" href="{% url 'login'%}">Log in</a>
+        </p>
 {% endblock %}

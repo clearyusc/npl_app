@@ -43,7 +43,7 @@
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto">
         <div class="inner">
-            <h3 class="masthead-brand">A NoPlaceLeft App</h3>
+            <h3 class="masthead-brand">A NoPlaceLeft App [Beta]</h3>
           <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link {% if request.resolver_match.url_name == 'landing_page' %}active{% endif %}"
                href="{% url 'npl:landing_page' %}">Home</a>
@@ -52,7 +52,7 @@
             <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
                href="{% url 'npl:contact' %}">Contact</a>
               <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}"
-                 href="{% url 'npl:login'%}">Log in</a>
+                 href="{% url 'login'%}">Log in</a>
           </nav>
         </div>
       </header>
