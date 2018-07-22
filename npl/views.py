@@ -1,4 +1,5 @@
-import json
+import json, csv
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
@@ -17,6 +18,7 @@ from django.views import generic
 
 from .models import Encounter, Laborer, Team
 from .view_models import DashboardViewModel, EncounterPinViewModel
+from .admin import EncounterResource
 from .forms import EncounterForm, TeamForm, CreateUserForm
 from . import utilities
 from django.utils import timezone
@@ -130,6 +132,25 @@ class EncounterIndexList(generic.ListView):
         """Return all encounters for this user."""
         my_encounters = get_my_encounters(self.request)
         return my_encounters.order_by('-date_time')
+
+
+def _export_encounters_to_csv_file(queryset):
+    dataset = EncounterResource().export(queryset=queryset)
+
+    response = HttpResponse(dataset.csv, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="my_encounters.csv"'
+
+    return response
+
+
+def export_my_encounters(request):
+    my_encounters = get_my_encounters(request).order_by('-date_time')
+    return _export_encounters_to_csv_file(my_encounters)
+
+
+def export_team_encounters(request, pk):
+    team_encounters = get_team_encounters(pk)
+    return _export_encounters_to_csv_file(team_encounters)
 
 
 def encounter_map(request):

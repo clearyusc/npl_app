@@ -41,19 +41,18 @@
 <script>
 
 function getResponseColor(response) {
- switch (response) {
-  case 'RL':
-   return 'red';
-  case 'YL':
-   return 'yellow';
-  case 'GL':
-   return 'green';
-  case 'WT':
-   return 'blue';
-  case 'RT':
-   return 'cyan';
- }
+
+    var colors = {
+            'RL': '#dc3545',
+            'YL': '#ffc107',
+            'GL': '#28a745',
+            'WT': '#17a2b8',
+            'EB': '#6c757d',
+        }
+
+    return colors[response]
 }
+
 
 map_center = {{ map_center|safe }}
 

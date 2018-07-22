@@ -40,6 +40,7 @@ RAVEN_CONFIG = {
 INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'bootstrap4',
+    'import_export',
     'npl.apps.NplConfig',
     'django.contrib.admin',
     'django.contrib.auth',

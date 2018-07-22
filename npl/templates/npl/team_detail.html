@@ -23,7 +23,8 @@
         </ul>
     </div>
     <div class="card-footer">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-around">
+            <a class="btn btn-outline-primary" href="{% url 'npl:export_team_encounters' team.id %}">Download Encounters</a>
             <a class="btn btn-outline-danger" href="{% url 'npl:leave_team' team.id %}">Leave Team</a>
         </div>
   </div>

@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('action_testimony', models.BooleanField(default=False)),
                 ('action_gospel', models.BooleanField(default=False)),
                 ('phone_number', models.IntegerField(blank=True, null=True)),
-                ('response', models.CharField(choices=[('RL', 'Red Light'), ('YL', 'Yellow Light'), ('GL', 'Green Light'), ('WT', 'Believer Wants Training'), ('RT', 'Believer Rejects Training')], max_length=2)),
+                ('response', models.CharField(choices=[('RL', 'Red Light'), ('YL', 'Yellow Light'), ('GL', 'Green Light'), ('WT', 'Believer Wants Training'), ('EB', 'Existing Believer')], max_length=2)),
                 ('notes', models.TextField(blank=True)),
                 ('date_time', models.DateTimeField(blank=True)),
                 ('is_oikos', models.BooleanField(default=False)),

@@ -41,6 +41,6 @@ def get_response_description(abbrev):
     MINISTRY_RESPONSES = {'RL': 'Red Light',
                           'YL': 'Yellow Light', 'GL': 'Green Light',
                           'WT': 'Believer Wants Training',
-                          'RT': 'Believer Rejects Training'}
+                          'EB': 'Existing Believer'}
     return MINISTRY_RESPONSES.get(abbrev)
 

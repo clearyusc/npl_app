@@ -99,7 +99,7 @@ class DashboardViewModel:
             self.num_yellow_lights = my_encounters.filter(response='YL').count()
             self.num_green_lights = my_encounters.filter(response='GL').count()
             self.num_believer_wants_training = my_encounters.filter(response='WT').count()
-            self.num_believer_rejects_training = my_encounters.filter(response='RT').count()
+            self.num_believer_rejects_training = my_encounters.filter(response='EB').count()
 
             self.percentage_red_lights = self.num_red_lights / self.num_encounters
             self.percentage_yellow_lights = self.num_yellow_lights / self.num_encounters

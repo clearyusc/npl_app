@@ -5,12 +5,19 @@ from django.contrib.auth.models import User
 MINISTRY_RESPONSES = (('RL', 'Red Light'),
                       ('YL', 'Yellow Light'), ('GL', 'Green Light'),
                       ('WT', 'Believer Wants Training'),
-                      ('RT', 'Believer Rejects Training'))
+                      ('EB', 'Existing Believer'))
 
 
 class Laborer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     creation_date = models.DateTimeField()
+
+    def __str__(self):
+        name = str(self.user.first_name) + str(self.user.last_name)
+        if name != '' and name is not None:
+            return name
+
+        return self.user.username
 
 
 class Encounter(models.Model):
@@ -37,6 +44,9 @@ class Encounter(models.Model):
     lng = models.FloatField(blank=True, null=True)
     full_address = models.CharField(max_length=300, blank=True, null=True)
 
+    def __str__(self):
+        return self.name + ' (' + self.response + ')'
+
 
 class Team(models.Model):
     team_name = models.CharField(max_length=40)
@@ -44,3 +54,7 @@ class Team(models.Model):
     members = models.ManyToManyField(Laborer)
     number_of_members = models.IntegerField(default=1)
     # leaders = models.ManyToManyField(Laborer)
+
+    def __str__(self):
+        return self.team_name
+
