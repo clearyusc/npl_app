@@ -18,22 +18,26 @@
                href="{% url 'npl:detail_encounter' encounter.id %}">
                 {{encounter.name}}
 
-            {% if encounter.response == 'RL' %}
-            <span class="badge badge-danger"> {{ encounter.response_description }}</span>
-            {% endif %}
-            {% if encounter.response == 'YL' %}
-            <span class="badge badge-warning"> {{ encounter.response_description }}</span>
-            {% endif %}
-            {% if encounter.response == 'GL' %}
-            <span class="badge badge-success"> {{ encounter.response_description }}</span>
-            {% endif %}
-            {% if encounter.response == 'WT' %}
-            <span class="badge badge-info"> Wants Training</span>
-            {% endif %}
-            {% if encounter.response == 'EB' %}
-            <span class="badge badge-secondary"> Existing Believer</span>
-            {% endif %}
-
+            <div>
+                {% if team_encounter_mode %}
+                    <span class="badge badge-pill badge-dark">{{ encounter.laborer.user.username }}</span>
+                {% endif %}
+                {% if encounter.response == 'RL' %}
+                <span class="badge badge-danger"> {{ encounter.response_description }}</span>
+                {% endif %}
+                {% if encounter.response == 'YL' %}
+                <span class="badge badge-warning"> {{ encounter.response_description }}</span>
+                {% endif %}
+                {% if encounter.response == 'GL' %}
+                <span class="badge badge-success"> {{ encounter.response_description }}</span>
+                {% endif %}
+                {% if encounter.response == 'WT' %}
+                <span class="badge badge-info"> Wants Training</span>
+                {% endif %}
+                {% if encounter.response == 'EB' %}
+                <span class="badge badge-secondary"> Existing Believer</span>
+                {% endif %}
+            </div>
             </a>
           {% endfor %}
       </div>

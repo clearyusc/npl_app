@@ -129,10 +129,24 @@ class EncounterIndexList(generic.ListView):
     template_name = 'npl/encounters.html'
     context_object_name = 'encounters_list'
 
-    def get_queryset(self):
-        """Return all encounters for this user."""
+    def get(self, request, *args, **kwargs):
         my_encounters = get_my_encounters(self.request)
-        return my_encounters.order_by('-date_time')
+        my_encounters.order_by('-date_time')
+        context = {'encounters_list': my_encounters,
+                   'team_encounter_mode': False}
+        return render(request, "npl/encounters.html", context=context)
+
+
+class TeamEncounterIndexList(generic.ListView):
+    template_name = 'npl/encounters.html'
+    context_object_name = 'encounters_list'
+
+    def get(self, request, *args, **kwargs):
+        team_encounters = get_team_encounters(kwargs['pk'])
+        team_encounters.order_by('-date_time')
+        context = {'encounters_list': team_encounters,
+                   'team_encounter_mode': True}
+        return render(request, "npl/encounters.html", context=context)
 
 
 def _export_encounters_to_csv_file(queryset):
