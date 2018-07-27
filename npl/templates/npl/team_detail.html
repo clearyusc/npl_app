@@ -9,8 +9,9 @@
         <h2 class="card-title">{{ team.team_name }}</h2>
     </div>
     <div class="card-body">
-        <div class="d-flex justify-content-center">
-            <a class="btn btn-primary" href="{% url 'npl:team_dashboard' team.id %}">Team Dashboard</a>
+        <div class="d-flex justify-content-around">
+            <a class="btn btn-primary" href="{% url 'npl:team_encounters_map' team.id %}">Encounters Map</a>
+            <a class="btn btn-secondary" href="{% url 'npl:team_dashboard' team.id %}">Dashboard</a>
         </div>
         <hr />
         <strong>Members:</strong>

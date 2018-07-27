@@ -8,26 +8,19 @@ from django.db import models
 
 NUM_WEEKS_TO_SHOW = 4
 
+
 class EncounterPinViewModel:
-    # todo: add laborer name here? helpful for team view?
-    # laborer_name = ''
-    response = ''
-    name = ''
-    full_address = ''
-    date_time = ''
-    actions = []
-    lat = None
-    lng = None
 
     def __init__(self, encounter: Encounter):
-        # self.laborer_name = encounter.laborer.name
+        self.laborer_name = encounter.laborer.user.username
         self.response = encounter.response
         self.name = encounter.name
         self.full_address = utilities.smart_get_address_string(encounter)
-        self.date_time = str(encounter.date_time)
+        self.date_time = str(encounter.date_time.strftime('%m/%d/%y'))
         self.set_actions(encounter)
         self.lat = encounter.lat
         self.lng = encounter.lng
+        self.actions = None
 
     def set_actions(self, encounter: Encounter):
         actions = []

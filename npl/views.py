@@ -57,6 +57,7 @@ def get_team_encounters(team_id):
     team_members = team.members.all()
 
     # todo: OPTIMIZE THIS QUERY!
+    # todo: account for time when people were not with that team
 
     for member in team_members:
         laborer_id = Laborer.objects.filter(id=member.id).first()
@@ -153,17 +154,15 @@ def export_team_encounters(request, pk):
     return _export_encounters_to_csv_file(team_encounters)
 
 
-def encounter_map(request):
+def _render_encounter_map(request, encounters, title):
     encounter_pins = []
     default_map_center = json.dumps({'lat': 39.8283, 'lng': -98.5795, 'zoom': 4})
 
-    my_encounters = get_my_encounters(request).order_by('-date_time')
-
     # Check if the user has logged any encounters yet!
-    if not my_encounters.exists():
+    if not encounters.exists():
         return render(request, 'npl/encounters_map.html', {'json': 'no_encounters', 'map_center': default_map_center})
 
-    for encounter in my_encounters:
+    for encounter in encounters:
         if encounter.lat is not None and encounter.lng is not None:
             encounter_pins.append(EncounterPinViewModel(encounter))
 
@@ -173,7 +172,19 @@ def encounter_map(request):
     else:
         _map_center = json.dumps({'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
 
-    return render(request, 'npl/encounters_map.html', {'json': _json, 'map_center': _map_center})
+    return render(request, 'npl/encounters_map.html', {'title': title, 'json': _json, 'map_center': _map_center})
+
+
+def encounter_map(request):
+    my_encounters = get_my_encounters(request).order_by('-date_time')
+    return _render_encounter_map(request, my_encounters, title='My Encounters')
+
+
+def team_encounter_map(request, pk):
+    team_encounters = get_team_encounters(pk).order_by('-date_time')
+    team = Team.objects.get(id=pk)
+
+    return _render_encounter_map(request, team_encounters, title=team.team_name)
 
 
 def view_my_dashboard(request):
@@ -267,7 +278,9 @@ def join_team(request):
                 team = Team.objects.filter(team_name=model_instance.team_name).first()
                 #model_instance.creation_date = team.creation_date  # todo: is there a better way? sorta hacky
                 team.members.add(get_laborer(request))
-                team.number_of_members = team.members.count()
+                team.number_of_members = team.number_of_members + 1
+                team.save()
+
                 return HttpResponseRedirect(reverse_lazy('npl:settings'))  # todo: improve this
             else:
                 return render(request, 'npl/team_join.html', {'form': form, 'error': 'Team does not exist!'})
@@ -285,7 +298,8 @@ def leave_team(request, pk):
 
     laborer = get_laborer(request)
     team.members.remove(laborer)
-
+    team.number_of_members = team.number_of_members - 1
+    team.save()
     return HttpResponseRedirect(reverse_lazy('npl:settings'))
 
 

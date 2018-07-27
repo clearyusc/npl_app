@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}My Encounters: Map{% endblock %}
+{% block title %}Map of Encounters{% endblock %}
 
 {% block html_head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
@@ -23,7 +23,7 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center">
-    <h2>My Encounters</h2>
+    <h2>{{ title }}</h2>
 <a class="btn btn-outline-primary" href="{% url 'npl:my_encounters' %}">List View</a>
 </div>
 
@@ -64,7 +64,7 @@ if (pins != 'no_encounters') {
      pin = pins[i];
      if (pin && pin.lat != undefined && pin.lng != undefined){
       circleMarker = L.circleMarker([pin.lat, pin.lng], {radius: 10, color: getResponseColor(pin.response), opacity: 0.2}).addTo(mymap)
-       .bindPopup(`<h3>${pin.name} (${pin.response})</h3>${pin.full_address}<br><strong>${pin.actions.join(', ')}</strong><br>${pin.date_time}`)
+       .bindPopup(`<h3>${pin.name}</h3><div class='d-flex justify-content-between'>@${pin.laborer_name}<i>${pin.date_time}</i></div><br /><strong>${pin.full_address}</strong><br /><br />`)
      }
     }
 }
