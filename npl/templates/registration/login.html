@@ -1,37 +1,23 @@
-{% extends "base_generic.html" %}
-{% load bootstrap4 %}
-
-{% block title %}
-    NPL App
-{% endblock %}
-
-{% block html_head %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'npl/cover.css' %}" />
-{% endblock %}
-
-{% block content %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+{% extends "base_generic.html" %} {% load bootstrap4 %} {% block title %} NPL App {% endblock %} {% block html_head %} {%
+load staticfiles %}
+<link rel="stylesheet" href="{% static 'cover.css' %}" /> {% endblock %} {% block content %} {% if next %} {% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+{% else %}
+<p>Please login to see this page.</p>
+{% endif %} {% endif %}
 
 <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {% bootstrap_form form %}
+    {% csrf_token %} {% bootstrap_form form %}
 
-<div>
-  <input class='btn btn-success' type="submit" value="Log In" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
+    <div>
+        <input class='btn btn-success' type="submit" value="Log In" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    </div>
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<p>
+    <a href="{% url 'password_reset' %}">Lost password?</a>
+</p>
 
 {% endblock %}

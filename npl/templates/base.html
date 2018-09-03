@@ -1,23 +1,26 @@
 <html>
+
 <head>
-<!--    <link rel="stylesheet" href="style.css"> -->
+    <!--    <link rel="stylesheet" href="style.css"> -->
     <title>{% block title %}NPL App{% endblock %}</title>
-     <!-- Required meta tags -->
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
-          integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+        crossorigin="anonymous">
     <style>
-    .shadow {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        border-radius: 5px; /* 5px rounded corners */
-    }
+        .shadow {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            /* 5px rounded corners */
+        }
     </style>
-    {% block html_head %}<!-- to import static resources -->
+    {% block html_head %}
+    <!-- to import static resources -->
     {% endblock %}
 </head>
 
@@ -25,10 +28,13 @@
 
 
 <body class="bg-light">
-    {% load static %}
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"><a class="navbar-brand" href="{% url 'npl:dashboard' %}">
-            <img src="{% static 'npl/npl-logo-1.png' %}" width="40" height="40" class="d-inline-block align-center">
-        <span class="ml-5">A NoPlaceLeft App [Beta]</span></a></nav>
+    {% load staticfiles %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="{% url 'npl:dashboard' %}">
+            <img src="{% static 'npl-logo-1.png' %}" width="40" height="40" class="d-inline-block align-center">
+            <span class="ml-5">A NoPlaceLeft App [Beta]</span>
+        </a>
+    </nav>
 
     <br />
     <br />
@@ -42,40 +48,48 @@
     <br />
     <br />
 
- <nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark w-100">
-            <div class="collapse navbar-collapse justify-content-center">
-                <ul class="navbar-nav w-100 d-flex justify-content-around">
-                  <li class="nav-item  {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                      <a class="nav-link" href="{% url 'npl:dashboard' %}"><i class="fas fa-tachometer-alt fa-2x"></i></a>
-                  </li>
-                  <li class="nav-item  {% if request.resolver_match.url_name == 'my_encounters' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'npl:my_encounters' %}"><i class="fas fa-list-alt fa-2x"></i></a>
-                  </li>
-                  <li class="nav-item  {% if request.resolver_match.url_name == 'new_encounter' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'npl:new_encounter' %}"><i class="fas fa-plus-circle fa-2x"></i></a>
-                  </li>
-                  <li class="nav-item  {% if request.resolver_match.url_name == 'my_encounters_map' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'npl:my_encounters_map' %}"><i class="fas fa-map-marker-alt fa-2x"></i></a>
-                  </li>
-                  <li class="nav-item  {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'npl:settings' %}"><i class="fas fa-users fa-2x"></i></a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark w-100">
+        <div class="collapse navbar-collapse justify-content-center">
+            <ul class="navbar-nav w-100 d-flex justify-content-around">
+                <li class="nav-item  {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'npl:dashboard' %}">
+                        <i class="fas fa-tachometer-alt fa-2x"></i>
+                    </a>
+                </li>
+                <li class="nav-item  {% if request.resolver_match.url_name == 'my_encounters' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'npl:my_encounters' %}">
+                        <i class="fas fa-list-alt fa-2x"></i>
+                    </a>
+                </li>
+                <li class="nav-item  {% if request.resolver_match.url_name == 'new_encounter' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'npl:new_encounter' %}">
+                        <i class="fas fa-plus-circle fa-2x"></i>
+                    </a>
+                </li>
+                <li class="nav-item  {% if request.resolver_match.url_name == 'my_encounters_map' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'npl:my_encounters_map' %}">
+                        <i class="fas fa-map-marker-alt fa-2x"></i>
+                    </a>
+                </li>
+                <li class="nav-item  {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'npl:settings' %}">
+                        <i class="fas fa-users fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
 </body>
 <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-{% block scripts %}{% endblock %}
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script> {% block scripts %}{% endblock %}
+
 </html>
 
 {% endif %}
-
-

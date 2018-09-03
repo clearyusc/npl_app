@@ -1,24 +1,18 @@
-{% extends "base_generic.html" %}
-
-{% block title %}
-    NPL App
-{% endblock %}
-
-{% block html_head %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'npl/cover.css' %}" />
-{% endblock %}
-
-{% block content %}
+{% extends "base_generic.html" %} {% block title %} NPL App {% endblock %} {% block html_head %} {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'cover.css' %}" /> {% endblock %} {% block content %}
 <h1 class="cover-heading">Contact</h1>
 <p class="lead">
-    Find a bug or have a feature request?<br />
-    Want to contribute to the development of this app?<br />
-    Want to donate to help support this <em>free kingdom tool</em>?<br />
-    <h3><strong>Contact us at npl.hop.app@gmail.com</strong></h3>
+    Find a bug or have a feature request?
+    <br /> Want to contribute to the development of this app?
+    <br /> Want to donate to help support this
+    <em>free kingdom tool</em>?
+    <br />
+    <h3>
+        <strong>Contact us at npl.hop.app@gmail.com</strong>
+    </h3>
 </p>
 <p class="lead">
     <a class="btn btn-primary" href="{% url 'npl:signup' %}">Create account</a>
-    <a  class="btn btn-secondary" href="{% url 'npl:features' %}">Learn more</a>
+    <a class="btn btn-secondary" href="{% url 'npl:features' %}">Learn more</a>
 </p>
 {% endblock %}

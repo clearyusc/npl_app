@@ -1,79 +1,85 @@
 <html>
-<head>
-<!--    <link rel="stylesheet" href="style.css"> -->
-    <title>{% block title %}NPL App{% endblock %}</title>
-     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
-          integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-    <style>
-    {% load staticfiles %}
-    .shadow {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        border-radius: 5px; /* 5px rounded corners */
+<head>
+  <!--    <link rel="stylesheet" href="style.css"> -->
+  <title>{% block title %}NPL App{% endblock %}</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+    crossorigin="anonymous">
+  <style>
+    {
+      % load staticfilesfiles %
     }
-    body, html {
-    height: 100%;
+
+    .shadow {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      /* 5px rounded corners */
+    }
+
+    body,
+    html {
+      height: 100%;
     }
 
     .bg {
-        /* The image used */
-        background-image: url({% static 'npl/neighborhood-2.jpg' %});
+      /* The image used */
+      background-image: url({% static 'neighborhood-2.jpg' %});
 
-        /* Full height */
-        height: 100%;
+      /* Full height */
+      height: 100%;
 
-        /* Center and scale the image nicely */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
-    </style>
-    {% block html_head %}<!-- to import static resources -->
-    {% endblock %}
+  </style>
+  {% block html_head %}
+  <!-- to import static resources -->
+  {% endblock %}
 </head>
 
 <body class="text-center bg">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
-        <div class="inner">
-            <h3 class="masthead-brand">A NoPlaceLeft App [Beta]</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link {% if request.resolver_match.url_name == 'landing_page' %}active{% endif %}"
-               href="{% url 'npl:landing_page' %}">Home</a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'features' %}active{% endif %}"
-               href="{% url 'npl:features' %}">Features</a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
-               href="{% url 'npl:contact' %}">Contact</a>
-              <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}"
-                 href="{% url 'login'%}">Log in</a>
-          </nav>
-        </div>
-      </header>
+  <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+      <div class="inner">
+        <h3 class="masthead-brand">A NoPlaceLeft App [Beta]</h3>
+        <nav class="nav nav-masthead justify-content-center">
+          <a class="nav-link {% if request.resolver_match.url_name == 'landing_page' %}active{% endif %}" href="{% url 'npl:landing_page' %}">Home</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'features' %}active{% endif %}" href="{% url 'npl:features' %}">Features</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'npl:contact' %}">Contact</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login'%}">Log in</a>
+        </nav>
+      </div>
+    </header>
 
-      <main role="main" class="inner cover">
-        {% block content %}{% endblock %}
-      </main>
+    <main role="main" class="inner cover">
+      {% block content %}{% endblock %}
+    </main>
 
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-            <strong>Until there is <a href="http://noplaceleft.net/">No Place Left.</a></strong>
-          <!--<p>App designed and created by <a href="https://github.com/clearyusc">Ryan Cleary</a>
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        <strong>Until there is
+          <a href="http://noplaceleft.net/">No Place Left.</a>
+        </strong>
+        <!--<p>App designed and created by <a href="https://github.com/clearyusc">Ryan Cleary</a>
           with help from the NPL Memphis team.</p> -->
-        </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
+  </div>
 
 
-    <!-- Bootstrap core JavaScript
+  <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-  </body>
+  <!-- Placed at the end of the document so the pages load faster -->
+</body>
 
 </html>
