@@ -30,7 +30,7 @@ else:
     SECRET_KEY = '+!xvq1ihsuct%ryctcd@5#^jmgnbdxp684w5*l5w^f5n*a)ckf'
     #SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '*',
                  'limitless-anchorage-42666.herokuapp.com/']
 
 RAVEN_CONFIG = {
