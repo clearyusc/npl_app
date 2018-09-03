@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'bootstrap4',
     'import_export',
-    'npl.apps.NplConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'npl.apps.NplConfig',
 ]
 
 MIDDLEWARE = [
