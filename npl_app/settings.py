@@ -36,7 +36,7 @@ else:
     #SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
-                 'murmuring-coast-85424.herokuapp.com/']
+                 'limitless-anchorage-42666.herokuapp.com/']
 
 RAVEN_CONFIG = {
     'dsn': 'https://9fa1f663919b4cdabab9ab2a0b610c8d:bb1e76564b4d4509a4173832f74304dd@sentry.io/1237578',
