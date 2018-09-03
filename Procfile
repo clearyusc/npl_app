@@ -1,2 +1,2 @@
-web: gunicorn npl_app.wsgi --log-file -
+web: gunicorn npl.wsgi --log-file -
 
