@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %} {% load bootstrap4 %} {% block title %} NPL App {% endblock %} {% block html_head %} {%
-load staticfiles %}
+load static %}
 <link rel="stylesheet" href="{% static 'cover.css' %}" /> {% endblock %} {% block content %} {% if next %} {% if user.is_authenticated %}
 <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
 {% else %}
