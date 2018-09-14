@@ -26,7 +26,7 @@ SECRET_KEY = '+!xvq1ihsuct%ryctcd@5#^jmgnbdxp684w5*l5w^f5n*a)ckf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nplapp.pythonanywhere.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://9fa1f663919b4cdabab9ab2a0b610c8d:bb1e76564b4d4509a4173832f74304dd@sentry.io/1237578',
@@ -131,3 +131,7 @@ STATIC_URL = '/static/'
 
 
 LOGIN_REDIRECT_URL = '/npl/my_encounters/list'
+
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
