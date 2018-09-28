@@ -1,92 +1,88 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard{% endblock %}
-
-{% block html_head %}
-{% load static %}
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block html_head %} {% load static %}
 <link rel="stylesheet" href="{% static 'npl/c3.min.css' %}" />
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
-<script src="{% static 'npl/c3.min.js' %}"></script>
-{% endblock %}
-
-{% block content %}
+<script src="{% static 'npl/c3.min.js' %}"></script> {% endblock %} {% block content %}
 
 <h2>{{title}} Dashboard</h2>
 
 {% if dashboard_empty %}
-<p>There are no encounters to show.  Get out there!</p>
+<p>There are no encounters to show. Get out there!</p>
 {% else %}
 <div class="card shadow mt-2">
     <div class="card-header">
         <h4 class="card-title">Response Distribution</h4>
     </div>
-  <div class="card-body">
-      <div id="response_percentages_chart"></div>
-  </div>
+    <div class="card-body">
+        <div id="response_percentages_chart"></div>
+    </div>
 </div>
 <br />
 <div class="card shadow mb-2">
     <div class="card-header">
         <h5 class="card-title">Encounters Over Last 4 Weeks</h5>
     </div>
-  <div class="card-body">
-      <div id="encounters_over_time_chart"></div>
-  </div>
+    <div class="card-body">
+        <div id="encounters_over_time_chart"></div>
+    </div>
 </div>
-{% endif %}
-{% endblock %}
-
-{% block scripts %}
+{% endif %} {% endblock %} {% block scripts %}
 <script>
-var json = {{ django_json|safe }}
-var chart1 = c3.generate({
-    bindto: '#response_percentages_chart',
-    data: {
-        colors: {
-            'RL': '#dc3545',
-            'YL': '#ffc107',
-            'GL': '#28a745',
-            'WT': '#17a2b8',
-            'EB': '#6c757d',
+    var json = {{ django_json| safe }}
+    var chart1 = c3.generate({
+        bindto: '#response_percentages_chart',
+        data: {
+            colors: {
+                'RL': '#dc3545',
+                'YL': '#ffc107',
+                'GL': '#28a745',
+                'WT': '#17a2b8',
+                'EB': '#6c757d',
+            },
+            columns: [
+                ['RL', json.num_red_lights],
+                ['YL', json.num_yellow_lights],
+                ['GL', json.num_green_lights],
+                ['WT', json.num_believer_wants_training],
+                ['EB', json.num_believer_rejects_training],
+            ],
+            type: 'donut',
+            onclick: function (d, i) { console.log("onclick", d, i); },
         },
-        columns: [
-            ['RL', json.num_red_lights],
-            ['YL', json.num_yellow_lights],
-            ['GL', json.num_green_lights],
-            ['WT', json.num_believer_wants_training],
-            ['EB', json.num_believer_rejects_training],
-        ],
-        type : 'donut',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-    },
-});
-// future: can make this into stacked bar chart
-var encounters_by_week_obj = {{ encounters_by_week|safe }}
-var num_encounters_by_week = encounters_by_week_obj.num_encounters
-var num_red_lights_by_week = encounters_by_week_obj.num_red_lights
+    });
+    // future: can make this into stacked bar chart
+    var encounters_by_week_obj = {{ encounters_by_week| safe }}
+    var num_encounters_by_week = encounters_by_week_obj.num_encounters
+    var num_red_lights_by_week = encounters_by_week_obj.num_red_lights
 
-var num_encounters = ['Number of Encounters']
-var num_red_lights = ['Number of Red Lights']
+    var num_encounters = []
+    //var num_red_lights = ['Number of Red Lights']
 
-for (var i=0; i<num_encounters_by_week.length; i++) {
-    num_encounters.push(num_encounters_by_week[i])
-    num_red_lights.push(num_red_lights_by_week[i])
-}
-var chart2 = c3.generate({
-    bindto: '#encounters_over_time_chart',
-    data: {
-        columns: [
-            num_encounters,
-        ],
-        type: 'bar',
-    },
-    grid: {
-        y: {
-            lines: [{value:0}]
-        }
+    for (var i = 0; i < num_encounters_by_week.length; i++) {
+        num_encounters.push(num_encounters_by_week[i])
+        //num_red_lights.push(num_red_lights_by_week[i])
     }
-});
+    // Rearrange for visual 
+    num_encounters.reverse()
+    num_encounters.unshift('Number of Encounters')
+    var chart2 = c3.generate({
+        bindto: '#encounters_over_time_chart',
+        data: {
+            columns: [
+                num_encounters,
+            ],
+            type: 'bar',
+        },
+        grid: {
+            y: {
+                lines: [{ value: 0 }]
+            }
+        },
+        axis: {
+            x: {
+                label: 'Week Number',
+            }
+        }
+    });
 
-</script>
-{% endblock %}
+</script> {% endblock %}

@@ -32,3 +32,4 @@ whichcraft==0.4.1
 wincertstore==0.2
 wrapt==1.10.11
 django-import-export
+whitenoise
