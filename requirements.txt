@@ -33,3 +33,4 @@ wincertstore==0.2
 wrapt==1.10.11
 django-import-export
 whitenoise
+python-dotenv
