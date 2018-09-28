@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import raven
+
+# NOTE: This env variable loading does not work here in PythonAnywhere. Must be done in PA's wsgi.
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.getcwd(), '.env'))

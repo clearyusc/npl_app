@@ -34,3 +34,4 @@ wrapt==1.10.11
 django-import-export
 whitenoise
 python-dotenv
+psycopg2
