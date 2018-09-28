@@ -1,3 +1,4 @@
 .idea/
+.env
 npl_app/__pycache__/
 npl/__pycache__/

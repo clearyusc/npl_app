@@ -1,4 +1,5 @@
-import json, csv
+import json
+import csv
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.core.serializers import serialize
@@ -75,9 +76,12 @@ def new_encounter(request):
             model_instance = form.save(commit=False)
             model_instance.date_time = timezone.now()
             model_instance.laborer_id = get_laborer_id(request)
-            model_instance.lat, model_instance.lng = utilities.get_lat_lng_from_address(model_instance)
-            model_instance.response_description = utilities.get_response_description(model_instance.response)
-            model_instance.full_address = utilities.smart_get_address_string(model_instance)
+            model_instance.lat, model_instance.lng = utilities.get_lat_lng_from_address(
+                model_instance)
+            model_instance.response_description = utilities.get_response_description(
+                model_instance.response)
+            model_instance.full_address = utilities.smart_get_address_string(
+                model_instance)
             model_instance.save()
 
             return HttpResponseRedirect(reverse_lazy('npl:my_encounters'))
@@ -110,11 +114,14 @@ def edit_encounter(request, pk):
 
             # Need to update these every time in case the data changes:
             if model_instance.lat != encounter.lat or model_instance.lng != encounter.lng:
-                model_instance.lat, model_instance.lng = utilities.get_lat_lng_from_address(model_instance)
+                model_instance.lat, model_instance.lng = utilities.get_lat_lng_from_address(
+                    model_instance)
             if model_instance.response != encounter.response:
-                model_instance.response_description = utilities.get_response_description(model_instance.response)
+                model_instance.response_description = utilities.get_response_description(
+                    model_instance.response)
 
-            model_instance.full_address = utilities.smart_get_address_string(model_instance)
+            model_instance.full_address = utilities.smart_get_address_string(
+                model_instance)
 
             model_instance.save()
 
@@ -170,7 +177,8 @@ def export_team_encounters(request, pk):
 
 def _render_encounter_map(request, encounters, title):
     encounter_pins = []
-    default_map_center = json.dumps({'lat': 39.8283, 'lng': -98.5795, 'zoom': 4})
+    default_map_center = json.dumps(
+        {'lat': 39.8283, 'lng': -98.5795, 'zoom': 4})
 
     # Check if the user has logged any encounters yet!
     if not encounters.exists():
@@ -184,7 +192,8 @@ def _render_encounter_map(request, encounters, title):
     if encounter_pins is None:  # default map center shows the entire US in view
         _map_center = default_map_center
     else:
-        _map_center = json.dumps({'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
+        _map_center = json.dumps(
+            {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
 
     return render(request, 'npl/encounters_map.html', {'title': title, 'json': _json, 'map_center': _map_center})
 
@@ -266,12 +275,14 @@ def create_team(request):
         if form.is_valid():
             model_instance = form.save(commit=False)
             model_instance.creation_date = timezone.now()
-            team_exists = Team.objects.filter(team_name=model_instance.team_name).count() > 0
+            team_exists = Team.objects.filter(
+                team_name=model_instance.team_name).count() > 0
             if team_exists:
                 return render(request, 'npl/team_form.html', {'form': form, 'error': 'A team with that name already exists!'})
             else:
                 model_instance.save()
-                model_instance.members.add(get_laborer(request))  # the creator of the team automatically joins
+                # the creator of the team automatically joins
+                model_instance.members.add(get_laborer(request))
                 return HttpResponseRedirect(reverse_lazy('npl:settings'))
 
         else:
@@ -287,15 +298,18 @@ def join_team(request):
         form = TeamForm(request.POST)
         if form.is_valid():
             model_instance = form.save(commit=False)
-            team_exists = Team.objects.filter(team_name=model_instance.team_name).count() > 0
+            team_exists = Team.objects.filter(
+                team_name=model_instance.team_name).count() > 0
             if team_exists:
-                team = Team.objects.filter(team_name=model_instance.team_name).first()
-                #model_instance.creation_date = team.creation_date  # todo: is there a better way? sorta hacky
+                team = Team.objects.filter(
+                    team_name=model_instance.team_name).first()
+                # model_instance.creation_date = team.creation_date  # todo: is there a better way? sorta hacky
                 team.members.add(get_laborer(request))
                 team.number_of_members = team.number_of_members + 1
                 team.save()
 
-                return HttpResponseRedirect(reverse_lazy('npl:settings'))  # todo: improve this
+                # todo: improve this
+                return HttpResponseRedirect(reverse_lazy('npl:settings'))
             else:
                 return render(request, 'npl/team_join.html', {'form': form, 'error': 'Team does not exist!'})
 
@@ -339,7 +353,7 @@ def contact(request):
 
 
 class SignUp(generic.CreateView):
-    form_class = UserCreationForm # LaborerCreationForm
+    form_class = UserCreationForm  # LaborerCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
@@ -357,7 +371,8 @@ class CreateUserView(SuccessMessageMixin, generic.CreateView):
         password = form.cleaned_data['password']
         repeat_password = form.cleaned_data['repeat_password']
         if password != repeat_password:
-            messages.error(self.request, "Passwords do not Match", extra_tags='alert alert-danger')
+            messages.error(self.request, "Passwords do not Match",
+                           extra_tags='alert alert-danger')
             return render(self.request, self.template_name, c)
         user.set_password(password)
         user.save()
@@ -387,4 +402,4 @@ class EditEncounter(generic.edit.UpdateView):
               'apt_or_unit', 'city', 'state', 'zip', 'notes']
 
     success_url = reverse_lazy('npl:my_encounters')
-    #todo: Change the url to go back to detail view?
+    # todo: Change the url to go back to detail view?

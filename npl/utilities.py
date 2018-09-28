@@ -13,7 +13,8 @@ def smart_get_address_string(encounter: Encounter):
             return str(val).strip()
 
     def _get_parameters(input_parameters, joiner, address_so_far=None):
-        values = [_clean_component(param) for param in input_parameters if _clean_component(param)]
+        values = [_clean_component(
+            param) for param in input_parameters if _clean_component(param)]
 
         if address_so_far is None or address_so_far.strip() == '':
             return joiner.join(values)
@@ -21,7 +22,8 @@ def smart_get_address_string(encounter: Encounter):
             values.insert(0, address_so_far)
             return joiner.join(values)
 
-    address_dict["address"] = _get_parameters(["street_address_number", "street_address_name", "apt_or_unit"], " ")
+    address_dict["address"] = _get_parameters(
+        ["street_address_number", "street_address_name", "apt_or_unit"], " ")
     address_dict["address_city_state"] = _get_parameters(["city", "state"], ", ",
                                                          address_so_far=address_dict["address"])
 
@@ -31,6 +33,7 @@ def smart_get_address_string(encounter: Encounter):
 def get_lat_lng_from_address(encounter: Encounter) -> (float, float):
     if encounter.city is not None and encounter.state is not None:
         g = geocoder.google(smart_get_address_string(encounter))
+        # TODO: Put this through some sort of address correction to get nearest / best
         return g.lat, g.lng
     else:
         return None, None
@@ -43,4 +46,3 @@ def get_response_description(abbrev):
                           'WT': 'Believer Wants Training',
                           'EB': 'Existing Believer'}
     return MINISTRY_RESPONSES.get(abbrev)
-

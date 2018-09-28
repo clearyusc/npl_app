@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import raven
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.getcwd(), '.env'))
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,13 +23,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '+!xvq1ihsuct%ryctcd@5#^jmgnbdxp684w5*l5w^f5n*a)ckf'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
+
+if DEBUG is None:
+    raise Exception('Must set DEBUG environment variable to True or False.')
 ALLOWED_HOSTS = ['nplapp.pythonanywhere.com']
-if DEBUG is True:
+if DEBUG == 'True':
     ALLOWED_HOSTS.append('localhost')
 
 RAVEN_CONFIG = {
@@ -86,13 +93,24 @@ WSGI_APPLICATION = 'npl_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if DEBUG == 'True':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'de7sdm0kbsg6g8',
+            'USER': 'nhxmhsaipxrlgt',
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': 'ec2-54-235-86-226.compute-1.amazonaws.com',
+            'PORT': 5432,
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
