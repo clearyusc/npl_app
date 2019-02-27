@@ -9,7 +9,9 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /code
 
 # Install dependencies
-RUN pip install -r requirements.txt
 
 # Copy project
 COPY . /code/
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["/bin/bash", "/code/entrypoint.sh"]
