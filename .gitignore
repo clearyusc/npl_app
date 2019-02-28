@@ -1,6 +1,7 @@
 .idea/
 npl_app/__pycache__/
 npl/__pycache__/
+npl/migrations/__pycache__/
 staticfiles/
 .venv/
 

@@ -11,10 +11,17 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import raven
+import sentry_sdk
 
-# NOTE: This env variable loading does not work here in PythonAnywhere. Must be done in PA's wsgi.
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk import capture_exception
+
 from dotenv import load_dotenv
+
+sentry_sdk.init( # TODO: put this in a environ variable
+    dsn="https://9fa1f663919b4cdabab9ab2a0b610c8d@sentry.io/1237578",
+    integrations=[DjangoIntegration()]
+)
 
 load_dotenv(os.path.join(os.getcwd(), '.env'))
 
@@ -25,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = os.environ.get('DEBUG')
 
 if DEBUG is None:
-    raise Exception('Must set DEBUG environment variable to True or False.')
+    capture_exception('Must set DEBUG environment variable to True or False.')
     
 if DEBUG == 'True':
     SECRET_KEY = '4eZ2MM1G9CPZsJ3SqeDMGMn5y16pKuNh'
@@ -35,18 +42,11 @@ else:
     SECRET_KEY = os.environ.get('SECRET_KEY')    
     ALLOWED_HOSTS = ['www.noplaceleftapp.com', 'noplaceleftapp.com']
 
-RAVEN_CONFIG = {
-    'dsn': 'https://9fa1f663919b4cdabab9ab2a0b610c8d:bb1e76564b4d4509a4173832f74304dd@sentry.io/1237578',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    #'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
-}
 
 # Application definition
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
-    'raven.contrib.django.raven_compat',
     'bootstrap4',
     'import_export',
     'npl.apps.NplConfig',
