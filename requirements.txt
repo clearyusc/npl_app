@@ -12,6 +12,7 @@ django-bootstrap4==0.0.6
 future==0.16.0
 geocoder==1.38.0
 geopy==1.12.0
+gunicorn==19.9.0
 idna==2.6
 isort==4.3.4
 Jinja2==2.10
@@ -27,8 +28,9 @@ ratelim==0.1.6
 raven==6.9.0
 requests==2.18.4
 six==1.11.0
-urllib3==1.22
+urllib3==1.23
 whichcraft==0.4.1
+whitenoise==4.1.2
 wincertstore==0.2
 wrapt==1.10.11
 django-import-export

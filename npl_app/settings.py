@@ -21,22 +21,19 @@ load_dotenv(os.path.join(os.getcwd(), '.env'))
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
 if DEBUG is None:
     raise Exception('Must set DEBUG environment variable to True or False.')
-ALLOWED_HOSTS = ['nplapp.pythonanywhere.com']
+    
 if DEBUG == 'True':
-    ALLOWED_HOSTS.append('localhost')
+    SECRET_KEY = '4eZ2MM1G9CPZsJ3SqeDMGMn5y16pKuNh'
+    ALLOWED_HOSTS = ['localhost']
+else:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = os.environ.get('SECRET_KEY')    
+    ALLOWED_HOSTS = ['www.noplaceleftapp.com', 'noplaceleftapp.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://9fa1f663919b4cdabab9ab2a0b610c8d:bb1e76564b4d4509a4173832f74304dd@sentry.io/1237578',
@@ -48,6 +45,7 @@ RAVEN_CONFIG = {
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'raven.contrib.django.raven_compat',
     'bootstrap4',
     'import_export',
@@ -150,8 +148,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = '/staticfiles/'
+#STATIC_URL = '/static/'
+#STATIC_ROOT = '/staticfiles/'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/npl/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/npl/my_encounters/list'
