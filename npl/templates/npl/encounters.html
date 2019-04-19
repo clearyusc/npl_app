@@ -6,8 +6,14 @@
 
 {% if encounters_list %}
 <div class="d-flex justify-content-between align-items-center">
-    <h2>My Encounters</h2>
-<a class="btn btn-outline-primary" href="{% url 'npl:my_encounters_map' %}">Map View</a>
+    
+    {% if team_encounter_mode %}
+        <h2>{{team_name}}</h2>
+        <a class="btn btn-outline-primary" href="{% url  'npl:team_encounters_map' team_id %}">Team Map</a>
+    {% else %}
+        <h2>My Encounters</h2>
+        <a class="btn btn-outline-primary" href="{% url 'npl:my_encounters_map' %}">Map View</a>
+    {% endif %}
 </div>
 
 <!--<div class="card mt-3">
