@@ -186,14 +186,19 @@ def _render_encounter_map(request, encounters, title):
 
     for encounter in encounters:
         if encounter.lat is not None and encounter.lng is not None:
+            raise Exception('encounter lat, lng = {}, {}'.format(encounter.lat, encounter.lng))
             encounter_pins.append(EncounterPinViewModel(encounter))
 
     _json = json.dumps(encounter_pins, cls=LazyEncoder)
     if encounter_pins is None:  # default map center shows the entire US in view
         _map_center = default_map_center
     else:
-        _map_center = json.dumps(
-            {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
+        try:
+            # TODO: figure out why this code is breaking sometimes here with 1 encounter w/out lat, lng
+            _map_center = json.dumps(
+                {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
+        except Exception:
+            _map_center = default_map_center
 
     return render(request, 'npl/encounters_map.html', {'title': title, 'json': _json, 'map_center': _map_center})
 
