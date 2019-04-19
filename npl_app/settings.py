@@ -156,4 +156,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/npl/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/npl/my_encounters/list'
+LOGIN_REDIRECT_URL = '/my_encounters/list'

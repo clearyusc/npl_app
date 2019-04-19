@@ -89,7 +89,6 @@ def new_encounter(request):
     else:
         my_encounters = get_my_encounters(request)
         if my_encounters.exists():
-            print('IT EXISTS?!?!?!?!?!?!?!?!')
             recent = my_encounters.order_by('-date_time')[0]
             form = EncounterForm(initial={'street_address_name': recent.street_address_name,
                                           'city': recent.city,
@@ -149,10 +148,14 @@ class TeamEncounterIndexList(generic.ListView):
     context_object_name = 'encounters_list'
 
     def get(self, request, *args, **kwargs):
-        team_encounters = get_team_encounters(kwargs['pk'])
+        team_id = kwargs['pk']
+        team_name = Team.objects.filter(id=team_id).first().team_name
+        team_encounters = get_team_encounters(team_id)
         team_encounters.order_by('-date_time')
         context = {'encounters_list': team_encounters,
-                   'team_encounter_mode': True}
+                   'team_encounter_mode': True,
+                   'team_id':team_id,
+                   'team_name':team_name}
         return render(request, "npl/encounters.html", context=context)
 
 
@@ -175,7 +178,8 @@ def export_team_encounters(request, pk):
     return _export_encounters_to_csv_file(team_encounters)
 
 
-def _render_encounter_map(request, encounters, title):
+def _render_encounter_map(request, encounters, title, team_id=None):
+    
     encounter_pins = []
     default_map_center = json.dumps(
         {'lat': 39.8283, 'lng': -98.5795, 'zoom': 4})
@@ -192,10 +196,14 @@ def _render_encounter_map(request, encounters, title):
     if encounter_pins is None:  # default map center shows the entire US in view
         _map_center = default_map_center
     else:
-        _map_center = json.dumps(
-            {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
+        try:
+            # TODO: figure out why this code is breaking sometimes here with 1 encounter w/out lat, lng
+            _map_center = json.dumps(
+                {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
+        except Exception:
+            _map_center = default_map_center
 
-    return render(request, 'npl/encounters_map.html', {'title': title, 'json': _json, 'map_center': _map_center})
+    return render(request, 'npl/encounters_map.html', {'title': title, 'json': _json, 'map_center': _map_center, 'team_id':team_id})
 
 
 def encounter_map(request):
@@ -207,7 +215,7 @@ def team_encounter_map(request, pk):
     team_encounters = get_team_encounters(pk).order_by('-date_time')
     team = Team.objects.get(id=pk)
 
-    return _render_encounter_map(request, team_encounters, title=team.team_name)
+    return _render_encounter_map(request, team_encounters, title=team.team_name, team_id=team.pk)
 
 
 def view_my_dashboard(request):
@@ -341,6 +349,8 @@ def log_out(request):
 
 
 def landing_page(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse_lazy('npl:new_encounter'))
     return render(request, 'registration/about.html')
 
 
