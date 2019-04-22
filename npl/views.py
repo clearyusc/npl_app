@@ -193,15 +193,12 @@ def _render_encounter_map(request, encounters, title, team_id=None):
             encounter_pins.append(EncounterPinViewModel(encounter))
 
     _json = json.dumps(encounter_pins, cls=LazyEncoder)
-    if encounter_pins is None:  # default map center shows the entire US in view
+    if len(encounter_pins) == 0:  # default map center shows the entire US in view
         _map_center = default_map_center
     else:
-        try:
-            # TODO: figure out why this code is breaking sometimes here with 1 encounter w/out lat, lng
-            _map_center = json.dumps(
-                {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
-        except Exception:
-            _map_center = default_map_center
+        # TODO: figure out why this code is breaking sometimes here with 1 encounter w/out lat, lng
+        _map_center = json.dumps(
+            {'lat': encounter_pins[0].lat, 'lng': encounter_pins[0].lng, 'zoom': 12})
 
     return render(request, 'npl/encounters_map.html', {'title': title, 'json': _json, 'map_center': _map_center, 'team_id':team_id})
 
@@ -246,7 +243,6 @@ def view_settings(request):
         other_team_members_list.append(other_team_members)
 
     #    my_teams_list = Team.objects.members.all().filter(laborer_id=get_laborer_id(request))
-    print('my team MEMBERS = {}'.format(other_team_members_list))
     return render(request, 'npl/settings.html', {'my_teams_list': my_teams_list,
                                                  'other_team_members_list': other_team_members_list,
                                                  })

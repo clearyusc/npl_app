@@ -24,7 +24,6 @@ class TeamForm(ModelForm):
         fields = ['team_name']
 
     #def team_name_already_exists(self, name):
-    #    print('TEAM NAME = ' + name)
     #    exists_already = Team.objects.get_or_create(team_name=name)[1]
     #    return exists_already
 

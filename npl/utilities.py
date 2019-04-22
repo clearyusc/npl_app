@@ -1,5 +1,6 @@
 import geocoder
 from .models import Encounter
+from sentry_sdk import capture_exception
 
 
 def smart_get_address_string(encounter: Encounter):
@@ -32,9 +33,14 @@ def smart_get_address_string(encounter: Encounter):
 
 def get_lat_lng_from_address(encounter: Encounter) -> (float, float):
     if encounter.city is not None and encounter.state is not None:
-        g = geocoder.google(smart_get_address_string(encounter))
-        # TODO: Put this through some sort of address correction to get nearest / best
-        return g.lat, g.lng
+        g = geocoder.yandex(smart_get_address_string(encounter))
+
+        if g.status == 'REQUEST_DENIED':
+            capture_exception('Geocoder Google package is not working.')
+            return None, None
+        else:
+            # TODO: Put this through some sort of address correction to get nearest / best
+            return g.lat, g.lng
     else:
         return None, None
 
