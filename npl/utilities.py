@@ -27,16 +27,17 @@ def smart_get_address_string(encounter: Encounter):
         ["street_address_number", "street_address_name", "apt_or_unit"], " ")
     address_dict["address_city_state"] = _get_parameters(["city", "state"], ", ",
                                                          address_so_far=address_dict["address"])
-
-    return _get_parameters(["zip"], " ", address_so_far=address_dict["address_city_state"])
+    return address_dict["address_city_state"] # FOR geocode osm
+    # TODO: add the zip back in 
+    #return _get_parameters(["zip"], " ", address_so_far=address_dict["address_city_state"])
 
 
 def get_lat_lng_from_address(encounter: Encounter) -> (float, float):
     if encounter.city is not None and encounter.state is not None:
-        g = geocoder.yandex(smart_get_address_string(encounter))
+        g = geocoder.osm(smart_get_address_string(encounter))
 
         if g.status == 'REQUEST_DENIED':
-            capture_exception('Geocoder Google package is not working.')
+            capture_exception('Geocoder OSM package is not working.')
             return None, None
         else:
             # TODO: Put this through some sort of address correction to get nearest / best

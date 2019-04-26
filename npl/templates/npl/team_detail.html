@@ -9,10 +9,12 @@
         <h2 class="card-title">{{ team.team_name }}</h2>
     </div>
     <div class="card-body">
-        <div class="btn-group" role="group" aria-label="Basic example">
-          <a type="button" class="btn btn-group-sm btn-secondary" href="{% url 'npl:team_dashboard' team.id %}">Dashboard</a>
-          <a type="button" class="btn btn-group-sm btn-secondary" href="{% url 'npl:team_encounters_list' team.id %}">Encounters List</a>
-          <a type="button" class="btn btn-group-sm btn-secondary" href="{% url 'npl:team_encounters_map' team.id %}">Encounters Map</a>
+        <div class="d-flex justify-content-center">
+            <div class="btn-group" role="group">
+            <a type="button" class="btn btn-group-sm btn-secondary" href="{% url 'npl:team_dashboard' team.id %}">Dashboard</a>
+            <a type="button" class="btn btn-group-sm btn-secondary" href="{% url 'npl:team_encounters_list' team.id %}">List</a>
+            <a type="button" class="btn btn-group-sm btn-secondary" href="{% url 'npl:team_encounters_map' team.id %}">Map</a>
+            </div>
         </div>
         <hr />
         <strong>Members:</strong>

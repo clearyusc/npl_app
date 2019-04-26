@@ -49,7 +49,7 @@ class Encounter(models.Model):
 
 
 class Team(models.Model):
-    team_name = models.CharField(max_length=40)
+    team_name = models.CharField(max_length=40, unique=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(Laborer)
     number_of_members = models.IntegerField(default=1)
