@@ -296,9 +296,27 @@ def create_team(request):
         form = TeamForm(request.POST)
         return render(request, 'npl/team_form.html', {'form': form})
 
+from django.core.exceptions import ObjectDoesNotExist
 
 def join_team(request):
     if request.method == "POST":
+        
+        team_name = request.POST.get("team_name")
+        team = None
+        try:
+            team = Team.objects.get(team_name=team_name)
+        except ObjectDoesNotExist:
+            pass
+
+        if team:
+            team.members.add(get_laborer(request))
+            team.number_of_members = team.number_of_members + 1
+            team.save()
+            return HttpResponseRedirect(reverse_lazy('npl:settings'))
+        else:
+            return render(request, 'npl/team_join.html', {'error': 'Team does not exist!'})
+
+        raise Exception(request.POST.get("team_name"))
         form = TeamForm(request.POST)
         if form.is_valid():
             model_instance = form.save(commit=False)
@@ -315,14 +333,15 @@ def join_team(request):
                 # todo: improve this
                 return HttpResponseRedirect(reverse_lazy('npl:settings'))
             else:
-                return render(request, 'npl/team_join.html', {'form': form, 'error': 'Team does not exist!'})
+                return render(request, 'npl/team_join.html', {'error': 'Team does not exist!'})
 
         else:
+            raise Exception('c')
             return render(request, 'npl/team_form.html', {'form': form, 'error': 'Form is invalid!'})
 
     else:
-        form = TeamForm(request.POST)
-        return render(request, 'npl/team_join.html', {'form': form})
+        #form = TeamForm(request.POST)
+        return render(request, 'npl/team_join.html')
 
 
 def leave_team(request, pk):
