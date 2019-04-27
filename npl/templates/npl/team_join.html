@@ -6,8 +6,9 @@
 {% block content %}
 <h2>Join a Team</h2>
 
-<form method="post" class="form">{% csrf_token %}
-    {% bootstrap_form form %}
+<form action="{% url 'npl:join_team' %}" method="post" class="form">{% csrf_token %}
+    <label for="team_name">Team Name: </label>
+    <input id="team_name" type="text" name="team_name">
     <input type="submit" value="Join Team" />
 </form>
 
