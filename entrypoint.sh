@@ -1,4 +1,4 @@
 # Collect static files
 python manage.py collectstatic --no-input
 
-gunicorn npl_app.wsgi -b 0.0.0.0:80
+gunicorn --workers=2 npl_app.wsgi -b 0.0.0.0:80
