@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python manage.py collectstatic --no-input && gunicorn --workers=2 npl_app.wsgi -b 0.0.0.0:8000
+    command: bash /code/entrypoint.sh
     env_file:
       - .env
     volumes:
