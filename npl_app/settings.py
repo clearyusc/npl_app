@@ -19,11 +19,6 @@ from sentry_sdk.integrations.redis import RedisIntegration
 
 from dotenv import load_dotenv
 
-sentry_sdk.init( # TODO: put this in a environ variable
-    dsn="https://9fa1f663919b4cdabab9ab2a0b610c8d@sentry.io/1237578",
-    integrations=[DjangoIntegration(), RedisIntegration()],
-    send_default_pii=True
-)
 
 load_dotenv(os.path.join(os.getcwd(), '.env'))
 
@@ -156,6 +151,23 @@ TIME_ZONE = 'US/Central'
 USE_I18N = True
 USE_L10N = True
 
+if ENVIRONMENT == 'production':
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    sentry_sdk.init( # TODO: put this in a environ variable
+        dsn="https://9fa1f663919b4cdabab9ab2a0b610c8d@sentry.io/1237578",
+        integrations=[DjangoIntegration(), RedisIntegration()],
+        send_default_pii=True
+    )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
