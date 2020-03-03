@@ -13,7 +13,6 @@ urlpatterns = [
     path('encounter/<int:pk>/edit/', views.edit_encounter, name='edit_encounter'),
     path('encounter/export_my_encounters', views.export_my_encounters, name='export_my_encounters'),
     path('encounter/export_team_encounters/<int:pk>', views.export_team_encounters, name='export_team_encounters'),
-    #    path('encounter/<int:pk>/edit/', views.EditEncounter.as_view(), name='edit_encounter'),
     path('encounter/<int:pk>/delete/', views.DeleteEncounter.as_view(), name='delete_encounter'),
     path('my_encounters/list/', views.EncounterIndexList.as_view(), name='my_encounters'),
     path('my_encounters/map/', views.encounter_map, name='my_encounters_map'),
