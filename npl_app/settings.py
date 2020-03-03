@@ -122,7 +122,11 @@ DATABASES = {
         'PORT': os.getenv('DATABASE_PORT', 5432),
         'OPTIONS': {} if DEBUG else {'sslmode': 'require'},
     }
- }
+}
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
