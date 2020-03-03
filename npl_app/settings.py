@@ -11,16 +11,18 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import sentry_sdk
 
+import dj_database_url
+import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk import capture_exception
+from sentry_sdk.integrations.redis import RedisIntegration
 
 from dotenv import load_dotenv
 
 sentry_sdk.init( # TODO: put this in a environ variable
     dsn="https://9fa1f663919b4cdabab9ab2a0b610c8d@sentry.io/1237578",
-    integrations=[DjangoIntegration()]
+    integrations=[DjangoIntegration(), RedisIntegration()],
+    send_default_pii=True
 )
 
 load_dotenv(os.path.join(os.getcwd(), '.env'))
@@ -28,19 +30,19 @@ load_dotenv(os.path.join(os.getcwd(), '.env'))
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 
-if DEBUG is None:
-    capture_exception('Must set DEBUG environment variable to True or False.')
-    
-if DEBUG == 'True':
-    SECRET_KEY = '4eZ2MM1G9CPZsJ3SqeDMGMn5y16pKuNh'
-    ALLOWED_HOSTS = ['localhost']
-else:
-    # SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = int(os.environ.get('DEBUG', default=0))
+
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
+
+USE_TZ = True
+
+if ENVIRONMENT == 'production':
     SECRET_KEY = os.environ.get('SECRET_KEY')    
-    ALLOWED_HOSTS = ['www.noplaceleftapp.com', 'noplaceleftapp.com']
+else:
+    SECRET_KEY = '4eZ2MM1G9CPZsJ3SqeDMGMn5y16pKuNh'
 
 
 # Application definition
@@ -49,13 +51,15 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'bootstrap4',
     'import_export',
-    'npl.apps.NplConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'npl.apps.NplConfig',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +78,7 @@ ROOT_URLCONF = 'npl_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,35 +89,45 @@ TEMPLATES = [
             ],
             'libraries':{
                 'npl_tags':'npl.templatetags.npl_tags',
-            }
+            },
         },
     },
 ]
 
 WSGI_APPLICATION = 'npl_app.wsgi.application'
 
+# Caches
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        "LOCATION": "redis://redis:6379/0",
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    },
+    'db_cache': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'api_cache_table',
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-if DEBUG == 'True':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+# Database
+# We use Postgres inside a local docker container for testing 
+# but in production we used a manage postgres database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME', 'postgres'),
+        'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),
+        'PORT': os.getenv('DATABASE_PORT', 5432),
+        'OPTIONS': {} if DEBUG else {'sslmode': 'require'},
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_NAME'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': os.environ.get('POSTGRES_HOST'),
-            'PORT': 5432,
-        }
-    }
+ }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -138,14 +152,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'US/Central'
-
 USE_I18N = True
-
 USE_L10N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
