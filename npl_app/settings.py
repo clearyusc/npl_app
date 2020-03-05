@@ -190,6 +190,6 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'npl_app.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/my_encounters/list'
