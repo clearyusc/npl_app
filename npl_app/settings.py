@@ -168,7 +168,7 @@ if ENVIRONMENT == 'production':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
     sentry_sdk.init( # TODO: put this in a environ variable
-        dsn="https://9fa1f663919b4cdabab9ab2a0b610c8d@sentry.io/1237578",
+        dsn=os.getenv('SENTRY_DSN'),
         integrations=[DjangoIntegration(), RedisIntegration()],
         send_default_pii=True
     )
