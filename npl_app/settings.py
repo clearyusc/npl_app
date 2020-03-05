@@ -176,17 +176,16 @@ if ENVIRONMENT == 'production':
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-#STATIC_URL = '/static/'
-#STATIC_ROOT = '/staticfiles/'
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_URL = '/npl/static/'
 
-# Note: This defines the location of static files for production:
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+STATIC_URL = '/static/'
 
 # Note: This defines the location of static files in local development:
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+
+# Note: This defines the location of static files for production:
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
