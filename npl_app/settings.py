@@ -180,8 +180,17 @@ if ENVIRONMENT == 'production':
 #STATIC_ROOT = '/staticfiles/'
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/npl/static/'
-#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Note: This defines the location of static files for production:
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+
+# Note: This defines the location of static files in local development:
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
 
 LOGIN_REDIRECT_URL = '/my_encounters/list'
