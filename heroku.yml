@@ -9,4 +9,5 @@ release:
   command:
     - python manage.py collectstatic --noinput
 run:
-  web: gunicorn npl_app.wsgi
+  web: bash -c "python manage.py collectstatic --noinput && gunicorn npl_app.wsgi"
+  #web: gunicorn npl_app.wsgi

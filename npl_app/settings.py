@@ -42,22 +42,23 @@ else:
 
 # Application definition
 
-INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
-    'bootstrap4',
-    'import_export',
-
+INSTALLED_APPS = [    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+
+    'bootstrap4',
+    'import_export',
 
     'npl.apps.NplConfig',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
